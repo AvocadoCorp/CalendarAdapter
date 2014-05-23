@@ -5,13 +5,12 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.view.Gravity;
-import android.widget.LinearLayout;
+import android.view.View;
 
 /**
  * Created by matthewlogan on 5/22/14.
  */
-public class CalendarCell extends LinearLayout {
+public class CalendarCell extends View {
 
     private Paint mEventPaint;
 
@@ -28,8 +27,8 @@ public class CalendarCell extends LinearLayout {
     public CalendarCell(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        setOrientation(VERTICAL);
-        setGravity(Gravity.CENTER_HORIZONTAL);
+//        setOrientation(VERTICAL);
+//        setGravity(Gravity.CENTER_HORIZONTAL);
 
         mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setTextSize((int) context.getResources().getDimension(R.dimen.cell_text_size));
