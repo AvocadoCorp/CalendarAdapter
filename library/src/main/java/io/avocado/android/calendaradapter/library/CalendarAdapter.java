@@ -1,6 +1,8 @@
 package io.avocado.android.calendaradapter.library;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +24,19 @@ public class CalendarAdapter extends BaseAdapter {
 
     private Date[] mMonths;
 
-    private String[] mDaysOfWeek =  {
-        "Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"
+    private String[] mDaysOfWeek = {
+            "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
     };
+
+    private Typeface mTitleTypeface;
+    private Typeface mDaysOfWeekTypeface;
+    private Typeface mCalendarCellTypeface;
+
+    private int mTitleTextColor;
+    private int mDaysOfWeekTextColor;
+    private int mCalendarCellTextColor;
+
+    private int mEventColor;
 
     @Override
     public int getCount() {
@@ -52,23 +64,56 @@ public class CalendarAdapter extends BaseAdapter {
         if (convertView == null) {
             LayoutInflater li = (LayoutInflater) mContext.getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
-            convertView = li.inflate(R.layout.calendar_page, null);
+            convertView = li.inflate(R.layout.calendar_page, parent, false);
             if (convertView == null) {
                 return null;
             }
 
             ViewHolder vh = new ViewHolder();
+
             vh.titleView = (TextView) convertView.findViewById(R.id.month_title);
+
+            if (mTitleTypeface != null) {
+                vh.titleView.setTypeface(mTitleTypeface);
+            }
+
+            if (mTitleTextColor != -1) {
+                vh.titleView.setTextColor(mTitleTextColor);
+            }
+
+            int titleTextSize = (int) mContext.getResources().getDimension(R.dimen.title_text_size);
+            vh.titleView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleTextSize);
+
             vh.daysOfWeekView = (LinearLayout) convertView.findViewById(R.id.days_of_week);
+
+            int dayOfWeekTextSize = (int) mContext.getResources().getDimension(R.dimen.day_of_week_text_size);
+
+            for (int i = 0; i < vh.daysOfWeekView.getChildCount(); i++) {
+                TextView dayLabel = (TextView) vh.daysOfWeekView.getChildAt(i);
+                if (dayLabel != null) {
+                    if (mDaysOfWeekTypeface != null) {
+                        dayLabel.setTypeface(mDaysOfWeekTypeface);
+                    }
+
+                    if (mDaysOfWeekTextColor != -1) {
+                        dayLabel.setTextColor(mDaysOfWeekTextColor);
+                    }
+
+                    dayLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, dayOfWeekTextSize);
+                }
+            }
+
             vh.calendarGrid = (CalendarGrid) convertView.findViewById(R.id.month_grid);
+            vh.calendarGrid.setTypeface(mCalendarCellTypeface);
+            vh.calendarGrid.setTextColor(mCalendarCellTextColor);
+            vh.calendarGrid.setEventColor(mEventColor);
+
             convertView.setTag(vh);
         }
-
         ViewHolder vh = (ViewHolder) convertView.getTag();
 
         SimpleDateFormat sdf = new SimpleDateFormat("MMMM", Locale.getDefault());
         String prettyMonth = sdf.format(mMonths[position]);
-
         vh.titleView.setText(prettyMonth);
 
         for (int i = 0; i < vh.daysOfWeekView.getChildCount(); i++) {
@@ -90,36 +135,106 @@ public class CalendarAdapter extends BaseAdapter {
         private Date mStartDate;
         private Date mEndDate;
 
+        private Typeface mTitleTypeface;
+        private Typeface mDaysOfWeekTypeface;
+        private Typeface mCalendarCellTypeface;
+
+        private int mTitleTextColor = -1;
+        private int mDaysOfWeekTextColor = -1;
+        private int mCalendarCellTextColor = -1;
+
+        private int mEventColor = -1;
+
         public Builder(Context context) {
             mContext = context;
         }
 
-        public Builder startDate(Date startDate) {
-            mStartDate = startDate;
+        public Builder titleTypeface(Typeface titleTypeface) {
+            mTitleTypeface = titleTypeface;
             return this;
         }
 
-        public Builder endDate(Date endDate) {
-            mEndDate = endDate;
+        public Builder daysOfWeekTypeface(Typeface daysOfWeekTypeface) {
+            mDaysOfWeekTypeface = daysOfWeekTypeface;
+            return this;
+        }
+
+        public Builder calendarCellTypeface(Typeface calendarCellTypeface) {
+            mCalendarCellTypeface = calendarCellTypeface;
+            return this;
+        }
+
+        public Builder titleTextColor(int titleTextColor) {
+            mTitleTextColor = titleTextColor;
+            return this;
+        }
+
+        public Builder daysOfWeekTextColor(int daysOfWeekTextColor) {
+            mDaysOfWeekTextColor = daysOfWeekTextColor;
+            return this;
+        }
+
+        public Builder calendarCellTextColor(int calendarCellTextColor) {
+            mCalendarCellTextColor = calendarCellTextColor;
+            return this;
+        }
+
+        public Builder startDate(Date someDateInStartMonth) {
+            mStartDate = someDateInStartMonth;
+            return this;
+        }
+
+        public Builder endDate(Date someDateInEndMonth) {
+            mEndDate = someDateInEndMonth;
+            return this;
+        }
+
+        public Builder eventColor(int eventColor) {
+            mEventColor = eventColor;
             return this;
         }
 
         public CalendarAdapter create() {
             CalendarAdapter calendarAdapter = new CalendarAdapter();
+
             calendarAdapter.mContext = mContext;
 
-            int totalMonths = CalendarUtils.getNumberOfMonthsApartInclusive(mStartDate, mEndDate);
-            Date[] months = new Date[totalMonths];
+            calendarAdapter.mTitleTypeface = mTitleTypeface;
+            calendarAdapter.mDaysOfWeekTypeface = mDaysOfWeekTypeface;
+            calendarAdapter.mCalendarCellTypeface = mCalendarCellTypeface;
 
+            calendarAdapter.mTitleTextColor = mTitleTextColor;
+            calendarAdapter.mDaysOfWeekTextColor = mDaysOfWeekTextColor;
+            calendarAdapter.mCalendarCellTextColor = mCalendarCellTextColor;
+
+            calendarAdapter.mEventColor = mEventColor;
+
+            Date startDate;
+            if (mStartDate != null) {
+                startDate = mStartDate;
+            } else {
+                startDate = new Date();
+            }
+
+            Date endDate;
+            if (mEndDate != null) {
+                endDate = mEndDate;
+            } else {
+                Calendar dateCal = Calendar.getInstance();
+                dateCal.setTime(startDate);
+                dateCal.add(Calendar.MONTH, 3);
+                endDate = dateCal.getTime();
+            }
+
+            int totalMonths = CalendarUtils.getNumberOfMonthsApartInclusive(startDate, endDate);
             Calendar cal = Calendar.getInstance();
             cal.setTime(mStartDate);
             cal.set(Calendar.DAY_OF_MONTH, 1);
-
+            Date[] months = new Date[totalMonths];
             for (int i = 0; i < totalMonths; i++) {
                 months[i] = cal.getTime();
                 cal.add(Calendar.MONTH, 1);
             }
-
             calendarAdapter.mMonths = months;
 
             return calendarAdapter;

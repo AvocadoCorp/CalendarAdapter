@@ -1,12 +1,11 @@
 package io.avocado.android.calendaradapter.library;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.util.Date;
 
@@ -18,32 +17,37 @@ public class CalendarGrid extends LinearLayout {
 
     private Context mContext;
 
+    private Typeface mTypeface;
+    private int mTextColor;
+
+    private int mEventColor;
+
     public CalendarGrid(Context context) {
         this(context, null);
     }
 
     public CalendarGrid(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Log.d("testing", "in view constructor");
 
         mContext = context;
 
         setOrientation(VERTICAL);
 
+        int rowHeight = (int) context.getResources().getDimension(R.dimen.cal_row_height);
+        int cellTextSize = (int) context.getResources().getDimension(R.dimen.cell_text_size);
+
         for (int i = 0; i < 6; i++) {
             LinearLayout calendarRow = new LinearLayout(mContext);
 
-            LayoutParams rowLp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            LayoutParams rowLp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, rowHeight);
             calendarRow.setLayoutParams(rowLp);
-
             calendarRow.setOrientation(HORIZONTAL);
 
             for (int j = 0; j < 7; j++) {
-                TextView calendarCell = new TextView(mContext);
+                CalendarCell calendarCell = new CalendarCell(mContext);
 
                 LayoutParams cellLp = new LayoutParams(0,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                        ViewGroup.LayoutParams.MATCH_PARENT);
                 cellLp.weight = 1;
                 calendarCell.setLayoutParams(cellLp);
 
@@ -60,11 +64,9 @@ public class CalendarGrid extends LinearLayout {
         int daysToShowInPreviousMonthBeforeThisMonth
                 = CalendarUtils.getNumberOfDaysToShowInPreviousMonthBeforeThisMonth(someDateInMonth);
 
-
         int grayColor = getResources().getColor(R.color.gray);
         int whiteColor = getResources().getColor(R.color.white);
-
-        boolean inNextMonth = false;
+        int pastEventColor = getResources().getColor(R.color.past_event_color);
 
         for (int calPosition = 0; calPosition < 42; calPosition++) {
 
@@ -73,37 +75,68 @@ public class CalendarGrid extends LinearLayout {
 
             LinearLayout row = (LinearLayout) getChildAt(rowNum);
 
-            TextView calendarCell = (TextView) row.getChildAt(colNum);
+            CalendarCell calendarCell = (CalendarCell) row.getChildAt(colNum);
+
+            if (mTypeface != null) {
+                calendarCell.setTypeface(mTypeface);
+            }
+
+            if (mTextColor != -1) {
+                calendarCell.setTextColor(mTextColor);
+            }
 
             int dayNum;
+            int bgColor;
+            int eventColor;
 
             if (calPosition < daysToShowInPreviousMonthBeforeThisMonth) {
 
                 dayNum = daysInPreviousMonth - daysToShowInPreviousMonthBeforeThisMonth + calPosition + 1;
-                calendarCell.setBackgroundColor(grayColor);
+                bgColor = grayColor;
+                eventColor = pastEventColor;
 
             } else if (calPosition >= daysToShowInPreviousMonthBeforeThisMonth &&
                     calPosition + 1 - daysToShowInPreviousMonthBeforeThisMonth <= daysInCurrentMonth) {
 
                 dayNum = calPosition + 1 - daysToShowInPreviousMonthBeforeThisMonth;
-                calendarCell.setBackgroundColor(whiteColor);
+                bgColor = whiteColor;
+                eventColor = mEventColor;
 
             } else {
+
+                if (colNum == 0) {
+                    row.setVisibility(View.GONE);
+                    break;
+                } else {
+                    row.setVisibility(View.VISIBLE);
+                }
 
                 dayNum = calPosition + 1 - daysToShowInPreviousMonthBeforeThisMonth - daysInCurrentMonth;
-                calendarCell.setBackgroundColor(grayColor);
-                inNextMonth = true;
-
+                bgColor = grayColor;
+                eventColor = pastEventColor;
             }
 
-            if (inNextMonth && colNum == 0) {
-                row.setVisibility(View.GONE);
-                break;
+            calendarCell.setDateText(String.valueOf(dayNum));
+            calendarCell.setBackgroundColor(bgColor);
+            calendarCell.setEventColor(eventColor);
+
+            if (dayNum % 3 == 0 || dayNum % 5 == 0) {
+                calendarCell.setNumEvents(1);
             } else {
-                row.setVisibility(View.VISIBLE);
+                calendarCell.setNumEvents(0);
             }
-
-            calendarCell.setText(String.valueOf(dayNum));
         }
+    }
+
+    public void setTypeface(Typeface typeface) {
+        mTypeface = typeface;
+    }
+
+    public void setTextColor(int textColor) {
+        mTextColor = textColor;
+    }
+
+    public void setEventColor(int eventColor) {
+        mEventColor = eventColor;
     }
 }

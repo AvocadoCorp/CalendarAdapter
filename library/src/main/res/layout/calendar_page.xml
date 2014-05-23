@@ -8,61 +8,74 @@
     <TextView
         android:id="@+id/month_title"
         android:layout_width="match_parent"
-        android:layout_height="30dp" />
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="7.5dp" />
 
     <LinearLayout
         android:id="@+id/days_of_week"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingBottom="7.5dp">
 
         <TextView
             android:id="@+id/sun_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:gravity="center_horizontal" />
 
         <TextView
             android:id="@+id/mon_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:gravity="center_horizontal" />
 
         <TextView
             android:id="@+id/tues_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:gravity="center_horizontal" />
 
         <TextView
             android:id="@+id/wed_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:gravity="center_horizontal" />
 
         <TextView
             android:id="@+id/thurs_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:gravity="center_horizontal" />
 
         <TextView
             android:id="@+id/fri_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:gravity="center_horizontal" />
 
         <TextView
             android:id="@+id/sat_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:gravity="center_horizontal" />
 
     </LinearLayout>
 
     <io.avocado.android.calendaradapter.library.CalendarGrid
         android:id="@+id/month_grid"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingBottom="15dp" />
 
 </LinearLayout>
