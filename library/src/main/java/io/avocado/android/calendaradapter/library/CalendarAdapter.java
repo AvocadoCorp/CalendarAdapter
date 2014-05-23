@@ -24,9 +24,7 @@ public class CalendarAdapter extends BaseAdapter {
 
     private Date[] mMonths;
 
-    private String[] mDaysOfWeek = {
-            "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
-    };
+    private String[] mDaysOfWeekStrings;
 
     private Typeface mTitleTypeface;
     private Typeface mDaysOfWeekTypeface;
@@ -37,6 +35,23 @@ public class CalendarAdapter extends BaseAdapter {
     private int mCalendarCellTextColor;
 
     private int mEventColor;
+
+    private CalendarAdapter(Context context, Date[] months, String[] daysOfWeekStrings,
+                            Typeface titleTypeface, Typeface daysOfWeekTypeface,
+                            Typeface calendarCellTypeface, int titleTextColor,
+                            int daysOfWeekTextColor, int calendarCellTextColor, int eventColor) {
+
+        mContext = context;
+        mMonths = months;
+        mDaysOfWeekStrings = daysOfWeekStrings;
+        mTitleTypeface = titleTypeface;
+        mDaysOfWeekTypeface = daysOfWeekTypeface;
+        mCalendarCellTypeface = calendarCellTypeface;
+        mTitleTextColor = titleTextColor;
+        mDaysOfWeekTextColor = daysOfWeekTextColor;
+        mCalendarCellTextColor = calendarCellTextColor;
+        mEventColor = eventColor;
+    }
 
     @Override
     public int getCount() {
@@ -72,21 +87,15 @@ public class CalendarAdapter extends BaseAdapter {
             ViewHolder vh = new ViewHolder();
 
             vh.titleView = (TextView) convertView.findViewById(R.id.month_title);
-
-            if (mTitleTypeface != null) {
-                vh.titleView.setTypeface(mTitleTypeface);
-            }
-
-            if (mTitleTextColor != -1) {
-                vh.titleView.setTextColor(mTitleTextColor);
-            }
-
-            int titleTextSize = (int) mContext.getResources().getDimension(R.dimen.title_text_size);
-            vh.titleView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleTextSize);
+            vh.titleView.setTypeface(mTitleTypeface);
+            vh.titleView.setTextColor(mTitleTextColor);
+            vh.titleView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                    (int) mContext.getResources().getDimension(R.dimen.title_text_size));
 
             vh.daysOfWeekView = (LinearLayout) convertView.findViewById(R.id.days_of_week);
 
-            int dayOfWeekTextSize = (int) mContext.getResources().getDimension(R.dimen.day_of_week_text_size);
+            int dayOfWeekTextSize = (int) mContext.getResources().getDimension(
+                    R.dimen.day_of_week_text_size);
 
             for (int i = 0; i < vh.daysOfWeekView.getChildCount(); i++) {
                 TextView dayLabel = (TextView) vh.daysOfWeekView.getChildAt(i);
@@ -119,7 +128,7 @@ public class CalendarAdapter extends BaseAdapter {
         for (int i = 0; i < vh.daysOfWeekView.getChildCount(); i++) {
             TextView dayLabel = (TextView) vh.daysOfWeekView.getChildAt(i);
             if (dayLabel != null) {
-                dayLabel.setText(mDaysOfWeek[i]);
+                dayLabel.setText(mDaysOfWeekStrings[i]);
             }
         }
 
@@ -135,6 +144,8 @@ public class CalendarAdapter extends BaseAdapter {
         private Date mStartDate;
         private Date mEndDate;
 
+        private String[] mDaysOfWeekStrings;
+
         private Typeface mTitleTypeface;
         private Typeface mDaysOfWeekTypeface;
         private Typeface mCalendarCellTypeface;
@@ -147,6 +158,21 @@ public class CalendarAdapter extends BaseAdapter {
 
         public Builder(Context context) {
             mContext = context;
+        }
+
+        public Builder startDate(Date someDateInStartMonth) {
+            mStartDate = someDateInStartMonth;
+            return this;
+        }
+
+        public Builder endDate(Date someDateInEndMonth) {
+            mEndDate = someDateInEndMonth;
+            return this;
+        }
+
+        private Builder daysOfWeekStrings(String[] daysOfWeekStrings) {
+            mDaysOfWeekStrings = daysOfWeekStrings;
+            return this;
         }
 
         public Builder titleTypeface(Typeface titleTypeface) {
@@ -179,35 +205,16 @@ public class CalendarAdapter extends BaseAdapter {
             return this;
         }
 
-        public Builder startDate(Date someDateInStartMonth) {
-            mStartDate = someDateInStartMonth;
-            return this;
-        }
-
-        public Builder endDate(Date someDateInEndMonth) {
-            mEndDate = someDateInEndMonth;
-            return this;
-        }
-
         public Builder eventColor(int eventColor) {
             mEventColor = eventColor;
             return this;
         }
 
         public CalendarAdapter create() {
-            CalendarAdapter calendarAdapter = new CalendarAdapter();
 
-            calendarAdapter.mContext = mContext;
-
-            calendarAdapter.mTitleTypeface = mTitleTypeface;
-            calendarAdapter.mDaysOfWeekTypeface = mDaysOfWeekTypeface;
-            calendarAdapter.mCalendarCellTypeface = mCalendarCellTypeface;
-
-            calendarAdapter.mTitleTextColor = mTitleTextColor;
-            calendarAdapter.mDaysOfWeekTextColor = mDaysOfWeekTextColor;
-            calendarAdapter.mCalendarCellTextColor = mCalendarCellTextColor;
-
-            calendarAdapter.mEventColor = mEventColor;
+            if (mContext == null) {
+                throw new IllegalStateException("Context cannot be null");
+            }
 
             Date startDate;
             if (mStartDate != null) {
@@ -235,9 +242,44 @@ public class CalendarAdapter extends BaseAdapter {
                 months[i] = cal.getTime();
                 cal.add(Calendar.MONTH, 1);
             }
-            calendarAdapter.mMonths = months;
 
-            return calendarAdapter;
+            if (mDaysOfWeekStrings == null) {
+                mDaysOfWeekStrings = new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+            }
+
+            if (mTitleTypeface == null) {
+                mTitleTypeface = Typeface.DEFAULT;
+            }
+
+            if (mDaysOfWeekTypeface == null) {
+                mDaysOfWeekTypeface = Typeface.DEFAULT;
+            }
+
+            if (mCalendarCellTypeface == null) {
+                mCalendarCellTypeface = Typeface.DEFAULT;
+            }
+
+            int defaultTextColor = mContext.getResources().getColor(R.color.default_text_color);
+
+            if (mTitleTextColor == -1) {
+                mTitleTextColor = defaultTextColor;
+            }
+
+            if (mDaysOfWeekTextColor == -1) {
+                mDaysOfWeekTextColor = defaultTextColor;
+            }
+
+            if (mCalendarCellTextColor == -1) {
+                mCalendarCellTextColor = defaultTextColor;
+            }
+
+            if (mEventColor == -1) {
+                mEventColor = mContext.getResources().getColor(R.color.default_event_color);
+            }
+
+            return new CalendarAdapter(mContext, months, mDaysOfWeekStrings, mTitleTypeface,
+                    mDaysOfWeekTypeface, mCalendarCellTypeface, mTitleTextColor,
+                    mDaysOfWeekTextColor, mCalendarCellTextColor, mEventColor);
         }
     }
 }

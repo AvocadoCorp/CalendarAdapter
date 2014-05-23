@@ -33,7 +33,6 @@ public class CalendarGrid extends LinearLayout {
         setOrientation(VERTICAL);
 
         int rowHeight = (int) context.getResources().getDimension(R.dimen.cal_row_height);
-        int cellTextSize = (int) context.getResources().getDimension(R.dimen.cell_text_size);
 
         for (int i = 0; i < 6; i++) {
             LinearLayout calendarRow = new LinearLayout(mContext);
