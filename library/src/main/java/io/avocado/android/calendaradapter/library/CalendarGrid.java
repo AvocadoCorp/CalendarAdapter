@@ -3,7 +3,6 @@ package io.avocado.android.calendaradapter.library;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
@@ -103,13 +102,6 @@ public class CalendarGrid extends LinearLayout {
                 eventColor = mEventColor;
 
             } else {
-
-                if (colNum == 0) {
-                    row.setVisibility(View.GONE);
-                    break;
-                } else {
-                    row.setVisibility(View.VISIBLE);
-                }
 
                 dayNum = calPosition + 1 - daysToShowInPreviousMonthBeforeThisMonth - daysInCurrentMonth;
                 bgColor = grayColor;
