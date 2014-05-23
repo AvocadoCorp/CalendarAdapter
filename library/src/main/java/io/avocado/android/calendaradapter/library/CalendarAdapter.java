@@ -244,7 +244,9 @@ public class CalendarAdapter extends BaseAdapter {
             }
 
             if (mDaysOfWeekStrings == null) {
-                mDaysOfWeekStrings = new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+                mDaysOfWeekStrings = new String[]{
+                        "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
+                };
             }
 
             if (mTitleTypeface == null) {

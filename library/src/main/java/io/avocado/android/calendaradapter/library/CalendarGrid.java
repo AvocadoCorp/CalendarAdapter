@@ -111,7 +111,13 @@ public class CalendarGrid extends LinearLayout {
             calendarCell.setBackgroundColor(bgColor);
             calendarCell.setEventColor(eventColor);
 
-            if (dayNum % 3 == 0 || dayNum % 5 == 0) {
+            if (dayNum % 3 == 0 && dayNum % 5 == 0) {
+                calendarCell.setNumEvents(4);
+            } else if (dayNum % 3 == 0) {
+                calendarCell.setNumEvents(3);
+            } else if (dayNum % 5 == 0) {
+                calendarCell.setNumEvents(2);
+            } else if (dayNum % 2 == 0) {
                 calendarCell.setNumEvents(1);
             } else {
                 calendarCell.setNumEvents(0);
