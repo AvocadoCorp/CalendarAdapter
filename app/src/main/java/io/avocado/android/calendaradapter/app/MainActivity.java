@@ -52,5 +52,4 @@ public class MainActivity extends ActionBarActivity {
 
         mCalendarListView.setAdapter(adapter);
     }
-
 }

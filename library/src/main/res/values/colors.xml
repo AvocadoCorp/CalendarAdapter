@@ -3,4 +3,5 @@
     <color name="white">#ffffff</color>
     <color name="gray">#d3d3d3</color>
     <color name="past_event_color">#4A4A4A</color>
+    <color name="default_text_color">#333333</color>
 </resources>

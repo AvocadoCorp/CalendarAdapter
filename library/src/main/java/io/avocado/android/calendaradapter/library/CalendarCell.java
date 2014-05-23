@@ -5,20 +5,19 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 /**
  * Created by matthewlogan on 5/22/14.
  */
-public class CalendarCell extends LinearLayout{
+public class CalendarCell extends LinearLayout {
 
     private Paint mEventPaint;
 
-    private TextView mDateTextView;
+    private Paint mTextPaint;
+
+    private String mDateText;
 
     private int mNumEvents;
 
@@ -32,44 +31,46 @@ public class CalendarCell extends LinearLayout{
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER_HORIZONTAL);
 
-        int textSize = (int) context.getResources().getDimension(R.dimen.cell_text_size);
-
-        mDateTextView = new TextView(context);
-        LayoutParams dateTextLp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        mDateTextView.setLayoutParams(dateTextLp);
-        mDateTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-        addView(mDateTextView);
+        mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mTextPaint.setTextSize((int) context.getResources().getDimension(R.dimen.cell_text_size));
+        mTextPaint.setTextAlign(Paint.Align.CENTER);
+        mTextPaint.setColor(context.getResources().getColor(R.color.default_text_color));
 
         mEventPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mEventPaint.setStyle(Paint.Style.FILL);
     }
 
     public void setTextColor(int textColor) {
-        mDateTextView.setTextColor(textColor);
+        mTextPaint.setColor(textColor);
+
     }
 
     public void setTypeface(Typeface typeface) {
-        mDateTextView.setTypeface(typeface);
+        mTextPaint.setTypeface(typeface);
     }
 
     public void setDateText(String dateText) {
-        mDateTextView.setText(dateText);
-    }
-
-    public void setNumEvents(int numEvents) {
-        mNumEvents = numEvents;
+        mDateText = dateText;
     }
 
     public void setEventColor(int eventColor) {
         mEventPaint.setColor(eventColor);
     }
 
+    public void setNumEvents(int numEvents) {
+        mNumEvents = numEvents;
+    }
+
+
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        int width = getWidth();
+        int height = getHeight();
+
+        canvas.drawText(mDateText, width / 2.f, 50, mTextPaint);
+
         if (mNumEvents > 0) {
-            int width = getWidth();
-            int height = getHeight();
 
             int size = (int) (.15f * width);
 
