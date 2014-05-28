@@ -28,7 +28,7 @@ public class CalendarCell extends View {
     private String mDateText;
 
     private int mNumEvents;
-    private int mNumSquaresToDraw; // Including plus sign
+    private int mNumRectsToDraw; // Including plus sign
 
     private static final int MAX_EVENTS = 3;
 
@@ -69,20 +69,17 @@ public class CalendarCell extends View {
 
     public void setNumEvents(int numEvents) {
         mNumEvents = numEvents;
-        mNumSquaresToDraw = Math.min(numEvents, MAX_EVENTS);
+        mNumRectsToDraw = Math.min(numEvents, MAX_EVENTS);
     }
 
     @Override
     protected void onSizeChanged (int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        mTextOrigin[0] = (int) (w / 2.f);
-        mTextOrigin[1] = 50;
-
-        int size = (int) (.125f * w);
-        int offsetFromBottom = (int) (.3f * h);
+        int size = (int) (.15f * Math.min(w, h));
+        int offsetFromBottom = (int) (.2f * h);
         int y = h - offsetFromBottom - size;
-        int space = size + (int) (size / 2.f); // square width + one space
+        int space = (int) (1.5f * size); // square width + one space
 
         int maxNumEventsOdd;
         int maxNumEventsEven;
@@ -147,6 +144,10 @@ public class CalendarCell extends View {
         //vertical stroke
         mPlusRects[1] = new Rect(midX - strokeThickness / 2, boundingPlusRect.top,
                 midX + strokeThickness / 2, boundingPlusRect.bottom);
+
+
+        mTextOrigin[0] = (int) (w / 2.f);
+        mTextOrigin[1] = y - size;
     }
 
     @Override
@@ -155,19 +156,14 @@ public class CalendarCell extends View {
 
         canvas.drawText(mDateText, mTextOrigin[0], mTextOrigin[1], mTextPaint);
 
-        ArrayList<Rect> eventRectsToDraw = mNumSquaresToDraw % 2 == 0 ? mEvenNumEventRects : mOddNumEventRects;
+        ArrayList<Rect> eventRectsToDraw = mNumRectsToDraw % 2 == 0 ? mEvenNumEventRects : mOddNumEventRects;
 
-        for (int i = 0; i < mNumSquaresToDraw; i++) {
-
-            if (i == mNumSquaresToDraw - 1 && mNumEvents > MAX_EVENTS) {
-
+        for (int i = 0; i < mNumRectsToDraw; i++) {
+            if (i == mNumRectsToDraw - 1 && mNumEvents > MAX_EVENTS) {
                 canvas.drawRect(mPlusRects[0], mPlusPaint);
                 canvas.drawRect(mPlusRects[1], mPlusPaint);
-
             } else {
-
                 canvas.drawRect(eventRectsToDraw.get(i), mEventPaint);
-
             }
         }
     }
