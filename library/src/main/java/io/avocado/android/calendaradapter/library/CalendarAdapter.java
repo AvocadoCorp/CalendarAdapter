@@ -36,6 +36,8 @@ public class CalendarAdapter extends BaseAdapter {
 
     private int mEventColor;
 
+    private SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("MMMM", Locale.getDefault());
+
     private CalendarAdapter(Context context, Date[] months, String[] daysOfWeekStrings,
                             Typeface titleTypeface, Typeface daysOfWeekTypeface,
                             Typeface calendarCellTypeface, int titleTextColor,
@@ -94,8 +96,14 @@ public class CalendarAdapter extends BaseAdapter {
 
             vh.daysOfWeekView = (LinearLayout) convertView.findViewById(R.id.days_of_week);
 
-            int dayOfWeekTextSize = (int) mContext.getResources().getDimension(
-                    R.dimen.day_of_week_text_size);
+            for (int i = 0; i < vh.daysOfWeekView.getChildCount(); i++) {
+                TextView dayLabel = (TextView) vh.daysOfWeekView.getChildAt(i);
+                if (dayLabel != null) {
+                    dayLabel.setText(mDaysOfWeekStrings[i]);
+                }
+            }
+
+            int dayOfWeekTextSize = (int) mContext.getResources().getDimension(R.dimen.day_of_week_text_size);
 
             for (int i = 0; i < vh.daysOfWeekView.getChildCount(); i++) {
                 TextView dayLabel = (TextView) vh.daysOfWeekView.getChildAt(i);
@@ -121,16 +129,8 @@ public class CalendarAdapter extends BaseAdapter {
         }
         ViewHolder vh = (ViewHolder) convertView.getTag();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MMMM", Locale.getDefault());
-        String prettyMonth = sdf.format(mMonths[position]);
+        String prettyMonth = mSimpleDateFormat.format(mMonths[position]);
         vh.titleView.setText(prettyMonth);
-
-        for (int i = 0; i < vh.daysOfWeekView.getChildCount(); i++) {
-            TextView dayLabel = (TextView) vh.daysOfWeekView.getChildAt(i);
-            if (dayLabel != null) {
-                dayLabel.setText(mDaysOfWeekStrings[i]);
-            }
-        }
 
         vh.calendarGrid.initCalendar(mMonths[position]);
 
