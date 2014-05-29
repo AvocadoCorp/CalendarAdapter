@@ -21,6 +21,10 @@ public class CalendarGrid extends LinearLayout {
 
     private int mEventColor;
 
+    private int mGrayColor;
+    private int mWhiteColor;
+    private int mPastEventColor;
+
     public CalendarGrid(Context context) {
         this(context, null);
     }
@@ -54,6 +58,10 @@ public class CalendarGrid extends LinearLayout {
 
             addView(calendarRow);
         }
+
+        mGrayColor = getResources().getColor(R.color.gray);
+        mWhiteColor = getResources().getColor(R.color.white);
+        mPastEventColor = getResources().getColor(R.color.past_event_color);
     }
 
     public void initCalendar(Date someDateInMonth) {
@@ -61,10 +69,6 @@ public class CalendarGrid extends LinearLayout {
         int daysInPreviousMonth = CalendarUtils.getNumberOfDaysInPreviousMonth(someDateInMonth);
         int daysToShowInPreviousMonthBeforeThisMonth
                 = CalendarUtils.getNumberOfDaysToShowInPreviousMonthBeforeThisMonth(someDateInMonth);
-
-        int grayColor = getResources().getColor(R.color.gray);
-        int whiteColor = getResources().getColor(R.color.white);
-        int pastEventColor = getResources().getColor(R.color.past_event_color);
 
         for (int calPosition = 0; calPosition < 42; calPosition++) {
 
@@ -90,21 +94,21 @@ public class CalendarGrid extends LinearLayout {
             if (calPosition < daysToShowInPreviousMonthBeforeThisMonth) {
 
                 dayNum = daysInPreviousMonth - daysToShowInPreviousMonthBeforeThisMonth + calPosition + 1;
-                bgColor = grayColor;
-                eventColor = pastEventColor;
+                bgColor = mGrayColor;
+                eventColor = mPastEventColor;
 
             } else if (calPosition >= daysToShowInPreviousMonthBeforeThisMonth &&
                     calPosition + 1 - daysToShowInPreviousMonthBeforeThisMonth <= daysInCurrentMonth) {
 
                 dayNum = calPosition + 1 - daysToShowInPreviousMonthBeforeThisMonth;
-                bgColor = whiteColor;
+                bgColor = mWhiteColor;
                 eventColor = mEventColor;
 
             } else {
 
                 dayNum = calPosition + 1 - daysToShowInPreviousMonthBeforeThisMonth - daysInCurrentMonth;
-                bgColor = grayColor;
-                eventColor = pastEventColor;
+                bgColor = mGrayColor;
+                eventColor = mPastEventColor;
             }
 
             calendarCell.setDateText(String.valueOf(dayNum));
