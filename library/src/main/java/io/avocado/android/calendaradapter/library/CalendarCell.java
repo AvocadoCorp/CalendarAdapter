@@ -22,6 +22,8 @@ public class CalendarCell extends View {
     private ArrayList<Rect> mOddNumEventRects = new ArrayList<Rect>();
     private ArrayList<Rect> mEvenNumEventRects = new ArrayList<Rect>();
 
+    private ArrayList<Rect> mEventRectsToDraw;
+
     private int[] mTextOrigin = new int[2];
     private Rect[] mPlusRects = new Rect[2];
 
@@ -70,6 +72,7 @@ public class CalendarCell extends View {
     public void setNumEvents(int numEvents) {
         mNumEvents = numEvents;
         mNumRectsToDraw = Math.min(numEvents, MAX_EVENTS);
+        mEventRectsToDraw = mNumRectsToDraw % 2 == 0 ? mEvenNumEventRects : mOddNumEventRects;
     }
 
     @Override
@@ -111,11 +114,13 @@ public class CalendarCell extends View {
         int firstTwoSquaresWidth = space + size;
         int evenLeftCenterX = (int) (w / 2.f - firstTwoSquaresWidth / 2.f);
         int evenRightCenterX = evenLeftCenterX + space;
+
         for (int i = 0; i < maxNumEventsEven; i++) {
 
             if (i == 1) {
                 mEvenNumEventRects.add(new Rect(evenLeftCenterX, y, evenLeftCenterX + size, y + size));
                 mEvenNumEventRects.add(new Rect(evenRightCenterX, y, evenRightCenterX + size, y + size));
+
             } else if (i % 2 != 0) {
                 int spacesFromCenter = i / 2;
 
@@ -156,14 +161,12 @@ public class CalendarCell extends View {
 
         canvas.drawText(mDateText, mTextOrigin[0], mTextOrigin[1], mTextPaint);
 
-        ArrayList<Rect> eventRectsToDraw = mNumRectsToDraw % 2 == 0 ? mEvenNumEventRects : mOddNumEventRects;
-
         for (int i = 0; i < mNumRectsToDraw; i++) {
             if (i == mNumRectsToDraw - 1 && mNumEvents > MAX_EVENTS) {
                 canvas.drawRect(mPlusRects[0], mPlusPaint);
                 canvas.drawRect(mPlusRects[1], mPlusPaint);
             } else {
-                canvas.drawRect(eventRectsToDraw.get(i), mEventPaint);
+                canvas.drawRect(mEventRectsToDraw.get(i), mEventPaint);
             }
         }
     }
