@@ -108,8 +108,11 @@ public class CalendarCell extends View {
     protected void onSizeChanged (int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        int size = (int) (.15f * Math.min(w, h));
-        int offsetFromBottom = (int) (.2f * h);
+        mTextOrigin[0] = (int) (w / 2.f);
+        mTextOrigin[1] = (int) (h / 2.f);
+
+        int size = (int) (.125f * w);
+        int offsetFromBottom = (int) (.1875f * h);
         int y = h - offsetFromBottom - size;
         int space = (int) (1.5f * size); // square width + one space
 
@@ -178,10 +181,6 @@ public class CalendarCell extends View {
         //vertical stroke
         mPlusRects[1] = new Rect(midX - strokeThickness / 2, boundingPlusRect.top,
                 midX + strokeThickness / 2, boundingPlusRect.bottom);
-
-
-        mTextOrigin[0] = (int) (w / 2.f);
-        mTextOrigin[1] = y - size;
     }
 
     @Override
