@@ -34,6 +34,8 @@ public class CalendarCell extends View {
     private int mNumEvents;
     private int mNumRectsToDraw; // Including plus sign
 
+    private int mHeightMeasureSpec = 0;
+
     private static final int MAX_EVENTS = 3;
 
     public enum RelativeMonth {
@@ -69,6 +71,14 @@ public class CalendarCell extends View {
 
         mOtherMonthBackgroundColor = context.getResources().getColor(R.color.gray);
         mOtherMonthEventColor = context.getResources().getColor(R.color.default_text_color);
+
+        int height = (int) (context.getResources().getDisplayMetrics().widthPixels / 7.f);
+        setMinimumHeight(height);
+    }
+
+    @Override
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, mHeightMeasureSpec);
     }
 
     public void setTextColor(int textColor) {

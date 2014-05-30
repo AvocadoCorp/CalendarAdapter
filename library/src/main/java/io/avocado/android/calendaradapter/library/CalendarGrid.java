@@ -38,13 +38,8 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
         setOrientation(VERTICAL);
 
-        int rowHeight = (int) context.getResources().getDimension(R.dimen.cal_row_height);
-
         for (int i = 0; i < 6; i++) {
             LinearLayout calendarRow = new LinearLayout(mContext);
-
-            LayoutParams rowLp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, rowHeight);
-            calendarRow.setLayoutParams(rowLp);
             calendarRow.setOrientation(HORIZONTAL);
 
             for (int j = 0; j < 7; j++) {
