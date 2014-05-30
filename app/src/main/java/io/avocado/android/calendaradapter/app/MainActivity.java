@@ -3,6 +3,7 @@ package io.avocado.android.calendaradapter.app;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.widget.ListView;
 
 import java.util.Calendar;
@@ -11,7 +12,7 @@ import java.util.Date;
 import io.avocado.android.calendaradapter.library.CalendarAdapter;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements CalendarAdapter.OnDateSelectedListener {
 
     private ListView mCalendarListView;
 
@@ -48,8 +49,14 @@ public class MainActivity extends ActionBarActivity {
                 .startDate(new Date())
                 .endDate(endCalendar.getTime())
                 .eventColor(eventColor)
+                .onDateSelectedListener(this)
                 .create();
 
         mCalendarListView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onDateSelected(Date date) {
+        Log.d("testing", "On date selected: " + date);
     }
 }

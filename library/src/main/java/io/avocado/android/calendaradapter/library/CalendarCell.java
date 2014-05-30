@@ -2,6 +2,7 @@ package io.avocado.android.calendaradapter.library;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -27,12 +28,25 @@ public class CalendarCell extends View {
     private int[] mTextOrigin = new int[2];
     private Rect[] mPlusRects = new Rect[2];
 
+    private int mDayOfMonth;
     private String mDateText;
 
     private int mNumEvents;
     private int mNumRectsToDraw; // Including plus sign
 
     private static final int MAX_EVENTS = 3;
+
+    public enum RelativeMonth {
+        PREVIOUS, CURRENT, NEXT
+    }
+
+    private RelativeMonth mRelativeMonth;
+
+    private int mCurrentMonthBackgroundColor;
+    private int mOtherMonthBackgroundColor;
+
+    private int mCurrentMonthEventColor;
+    private int mOtherMonthEventColor;
 
     public CalendarCell(Context context) {
         this(context, null);
@@ -50,6 +64,11 @@ public class CalendarCell extends View {
         mEventPaint.setStyle(Paint.Style.FILL);
 
         mPlusPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        mCurrentMonthBackgroundColor = Color.WHITE;
+
+        mOtherMonthBackgroundColor = context.getResources().getColor(R.color.gray);
+        mOtherMonthEventColor = context.getResources().getColor(R.color.default_text_color);
     }
 
     public void setTextColor(int textColor) {
@@ -60,13 +79,13 @@ public class CalendarCell extends View {
         mTextPaint.setTypeface(typeface);
     }
 
-    public void setDateText(String dateText) {
-        mDateText = dateText;
+    public void setDayOfMonth(int dayOfMonth) {
+        mDayOfMonth = dayOfMonth;
+        mDateText = String.valueOf(mDayOfMonth);
     }
 
     public void setEventColor(int eventColor) {
-        mEventPaint.setColor(eventColor);
-        mPlusPaint.setColor(eventColor);
+        mCurrentMonthEventColor = eventColor;
     }
 
     public void setNumEvents(int numEvents) {
@@ -169,5 +188,27 @@ public class CalendarCell extends View {
                 canvas.drawRect(mEventRectsToDraw.get(i), mEventPaint);
             }
         }
+    }
+
+    public void setRelativeMonth(RelativeMonth relativeMonth) {
+        mRelativeMonth = relativeMonth;
+
+        if (relativeMonth == RelativeMonth.CURRENT) {
+            setBackgroundColor(mCurrentMonthBackgroundColor);
+            mEventPaint.setColor(mCurrentMonthEventColor);
+            mPlusPaint.setColor(mCurrentMonthEventColor);
+        } else {
+            setBackgroundColor(mOtherMonthBackgroundColor);
+            mEventPaint.setColor(mOtherMonthEventColor);
+            mPlusPaint.setColor(mOtherMonthEventColor);
+        }
+    }
+
+    public RelativeMonth getRelativeMonth() {
+        return mRelativeMonth;
+    }
+
+    public int getDayOfMonth() {
+        return mDayOfMonth;
     }
 }

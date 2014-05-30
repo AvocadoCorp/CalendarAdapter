@@ -3,16 +3,18 @@ package io.avocado.android.calendaradapter.library;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
  * Created by matthewlogan on 5/22/14.
  */
 
-public class CalendarGrid extends LinearLayout {
+public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
     private Context mContext;
 
@@ -21,9 +23,9 @@ public class CalendarGrid extends LinearLayout {
 
     private int mEventColor;
 
-    private int mGrayColor;
-    private int mWhiteColor;
-    private int mPastEventColor;
+    private Date mSomeDateInMonth;
+
+    public CalendarAdapter.OnDateSelectedListener mListener;
 
     public CalendarGrid(Context context) {
         this(context, null);
@@ -58,13 +60,10 @@ public class CalendarGrid extends LinearLayout {
 
             addView(calendarRow);
         }
-
-        mGrayColor = getResources().getColor(R.color.gray);
-        mWhiteColor = getResources().getColor(R.color.white);
-        mPastEventColor = getResources().getColor(R.color.past_event_color);
     }
 
     public void initCalendar(Date someDateInMonth) {
+        mSomeDateInMonth = someDateInMonth;
         int daysInCurrentMonth = CalendarUtils.getNumberOfDaysInMonth(someDateInMonth);
         int daysInPreviousMonth = CalendarUtils.getNumberOfDaysInPreviousMonth(someDateInMonth);
         int daysToShowInPreviousMonthBeforeThisMonth
@@ -78,6 +77,9 @@ public class CalendarGrid extends LinearLayout {
             LinearLayout row = (LinearLayout) getChildAt(rowNum);
 
             CalendarCell calendarCell = (CalendarCell) row.getChildAt(colNum);
+            if (calendarCell == null) {
+                continue;
+            }
 
             if (mTypeface != null) {
                 calendarCell.setTypeface(mTypeface);
@@ -88,32 +90,29 @@ public class CalendarGrid extends LinearLayout {
             }
 
             int dayNum;
-            int bgColor;
-            int eventColor;
+            CalendarCell.RelativeMonth relativeMonth;
 
             if (calPosition < daysToShowInPreviousMonthBeforeThisMonth) {
 
                 dayNum = daysInPreviousMonth - daysToShowInPreviousMonthBeforeThisMonth + calPosition + 1;
-                bgColor = mGrayColor;
-                eventColor = mPastEventColor;
+                relativeMonth = CalendarCell.RelativeMonth.PREVIOUS;
 
             } else if (calPosition >= daysToShowInPreviousMonthBeforeThisMonth &&
                     calPosition + 1 - daysToShowInPreviousMonthBeforeThisMonth <= daysInCurrentMonth) {
 
                 dayNum = calPosition + 1 - daysToShowInPreviousMonthBeforeThisMonth;
-                bgColor = mWhiteColor;
-                eventColor = mEventColor;
+                relativeMonth = CalendarCell.RelativeMonth.CURRENT;
 
             } else {
 
                 dayNum = calPosition + 1 - daysToShowInPreviousMonthBeforeThisMonth - daysInCurrentMonth;
-                bgColor = mGrayColor;
-                eventColor = mPastEventColor;
+                relativeMonth = CalendarCell.RelativeMonth.NEXT;
             }
 
-            calendarCell.setDateText(String.valueOf(dayNum));
-            calendarCell.setBackgroundColor(bgColor);
-            calendarCell.setEventColor(eventColor);
+            calendarCell.setDayOfMonth(dayNum);
+            calendarCell.setEventColor(mEventColor);
+            calendarCell.setRelativeMonth(relativeMonth);
+            calendarCell.setOnClickListener(this);
 
             if (dayNum % 3 == 0 && dayNum % 5 == 0) {
                 calendarCell.setNumEvents(4);
@@ -139,5 +138,26 @@ public class CalendarGrid extends LinearLayout {
 
     public void setEventColor(int eventColor) {
         mEventColor = eventColor;
+    }
+
+    public void setOnDateSelectedListener(CalendarAdapter.OnDateSelectedListener listener) {
+        mListener = listener;
+    }
+
+    @Override
+    public void onClick(View v) {
+        CalendarCell cell = (CalendarCell) v;
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(mSomeDateInMonth);
+        cal.set(Calendar.DAY_OF_MONTH, cell.getDayOfMonth());
+
+        if (cell.getRelativeMonth() == CalendarCell.RelativeMonth.PREVIOUS) {
+            cal.add(Calendar.MONTH, -1);
+        } else if (cell.getRelativeMonth() == CalendarCell.RelativeMonth.NEXT) {
+            cal.add(Calendar.MONTH, 1);
+        }
+
+        mListener.onDateSelected(cal.getTime());
     }
 }

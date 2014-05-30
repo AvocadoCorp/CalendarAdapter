@@ -36,12 +36,20 @@ public class CalendarAdapter extends BaseAdapter {
 
     private int mEventColor;
 
+    private OnDateSelectedListener mListener;
+
     private SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("MMMM", Locale.getDefault());
+
+    public interface OnDateSelectedListener {
+        public void onDateSelected(Date date);
+    }
+
 
     private CalendarAdapter(Context context, Date[] months, String[] daysOfWeekStrings,
                             Typeface titleTypeface, Typeface daysOfWeekTypeface,
                             Typeface calendarCellTypeface, int titleTextColor,
-                            int daysOfWeekTextColor, int calendarCellTextColor, int eventColor) {
+                            int daysOfWeekTextColor, int calendarCellTextColor, int eventColor,
+                            OnDateSelectedListener listener) {
 
         mContext = context;
         mMonths = months;
@@ -53,6 +61,7 @@ public class CalendarAdapter extends BaseAdapter {
         mDaysOfWeekTextColor = daysOfWeekTextColor;
         mCalendarCellTextColor = calendarCellTextColor;
         mEventColor = eventColor;
+        mListener = listener;
     }
 
     @Override
@@ -124,6 +133,7 @@ public class CalendarAdapter extends BaseAdapter {
             vh.calendarGrid.setTypeface(mCalendarCellTypeface);
             vh.calendarGrid.setTextColor(mCalendarCellTextColor);
             vh.calendarGrid.setEventColor(mEventColor);
+            vh.calendarGrid.setOnDateSelectedListener(mListener);
 
             convertView.setTag(vh);
         }
@@ -155,6 +165,8 @@ public class CalendarAdapter extends BaseAdapter {
         private int mCalendarCellTextColor = -1;
 
         private int mEventColor = -1;
+
+        private OnDateSelectedListener mListener;
 
         public Builder(Context context) {
             mContext = context;
@@ -207,6 +219,11 @@ public class CalendarAdapter extends BaseAdapter {
 
         public Builder eventColor(int eventColor) {
             mEventColor = eventColor;
+            return this;
+        }
+
+        public Builder onDateSelectedListener(OnDateSelectedListener listener) {
+            mListener = listener;
             return this;
         }
 
@@ -281,7 +298,7 @@ public class CalendarAdapter extends BaseAdapter {
 
             return new CalendarAdapter(mContext, months, mDaysOfWeekStrings, mTitleTypeface,
                     mDaysOfWeekTypeface, mCalendarCellTypeface, mTitleTextColor,
-                    mDaysOfWeekTextColor, mCalendarCellTextColor, mEventColor);
+                    mDaysOfWeekTextColor, mCalendarCellTextColor, mEventColor, mListener);
         }
     }
 }
