@@ -203,7 +203,7 @@ public class CalendarCell extends View {
         mRelativeMonth = relativeMonth;
 
         if (relativeMonth == RelativeMonth.CURRENT) {
-            setBackgroundColor(mCurrentMonthBackgroundColor);
+            setBackgroundColor(Color.TRANSPARENT);
             mEventPaint.setColor(mCurrentMonthEventColor);
             mPlusPaint.setColor(mCurrentMonthEventColor);
         } else {
