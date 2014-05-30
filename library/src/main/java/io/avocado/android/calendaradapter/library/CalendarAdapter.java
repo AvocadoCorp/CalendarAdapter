@@ -36,6 +36,10 @@ public class CalendarAdapter extends BaseAdapter {
 
     private int mEventColor;
 
+    private int mPastFutureCalendarCellBackgroundColor;
+    private int mPastFutureCalendarCellTextColor;
+    private int mPastFutureEventColor;
+
     private OnDateSelectedListener mListener;
 
     private SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("MMMM", Locale.getDefault());
@@ -49,6 +53,8 @@ public class CalendarAdapter extends BaseAdapter {
                             Typeface titleTypeface, Typeface daysOfWeekTypeface,
                             Typeface calendarCellTypeface, int titleTextColor,
                             int daysOfWeekTextColor, int calendarCellTextColor, int eventColor,
+                            int pastFutureCalendarCellBackgroundColor,
+                            int pastFutureCalendarCellTextColor, int pastFutureEventColor,
                             OnDateSelectedListener listener) {
 
         mContext = context;
@@ -61,6 +67,9 @@ public class CalendarAdapter extends BaseAdapter {
         mDaysOfWeekTextColor = daysOfWeekTextColor;
         mCalendarCellTextColor = calendarCellTextColor;
         mEventColor = eventColor;
+        mPastFutureCalendarCellBackgroundColor = pastFutureCalendarCellBackgroundColor;
+        mPastFutureCalendarCellTextColor = pastFutureCalendarCellTextColor;
+        mPastFutureEventColor = pastFutureEventColor;
         mListener = listener;
     }
 
@@ -133,6 +142,9 @@ public class CalendarAdapter extends BaseAdapter {
             vh.calendarGrid.setTypeface(mCalendarCellTypeface);
             vh.calendarGrid.setTextColor(mCalendarCellTextColor);
             vh.calendarGrid.setEventColor(mEventColor);
+            vh.calendarGrid.setPastFutureCalendarCellBackgroundColor(mPastFutureCalendarCellBackgroundColor);
+            vh.calendarGrid.setPastFutureCalendarCellTextColor(mPastFutureCalendarCellTextColor);
+            vh.calendarGrid.setPastFutureEventColor(mPastFutureEventColor);
             vh.calendarGrid.setOnDateSelectedListener(mListener);
 
             convertView.setTag(vh);
@@ -166,6 +178,10 @@ public class CalendarAdapter extends BaseAdapter {
 
         private int mEventColor = -1;
 
+        private int mPastFutureCalendarCellBackgroundColor = -1;
+        private int mPastFutureCalendarCellTextColor = -1;
+        private int mPastFutureEventColor = -1;
+
         private OnDateSelectedListener mListener;
 
         public Builder(Context context) {
@@ -182,7 +198,7 @@ public class CalendarAdapter extends BaseAdapter {
             return this;
         }
 
-        private Builder daysOfWeekStrings(String[] daysOfWeekStrings) {
+        public Builder daysOfWeekStrings(String[] daysOfWeekStrings) {
             mDaysOfWeekStrings = daysOfWeekStrings;
             return this;
         }
@@ -219,6 +235,21 @@ public class CalendarAdapter extends BaseAdapter {
 
         public Builder eventColor(int eventColor) {
             mEventColor = eventColor;
+            return this;
+        }
+
+        public Builder pastFutureCalendarCellBackgroundColor(int pastFutureCalendarCellBackgroundColor) {
+            mPastFutureCalendarCellBackgroundColor = pastFutureCalendarCellBackgroundColor;
+            return this;
+        }
+
+        public Builder pastFutureCalendarCellTextColor(int pastFutureCalendarCellTextColor) {
+            mPastFutureCalendarCellTextColor = pastFutureCalendarCellTextColor;
+            return this;
+        }
+
+        public Builder pastFutureEventColor(int pastFutureEventColor) {
+            mPastFutureEventColor = pastFutureEventColor;
             return this;
         }
 
@@ -296,9 +327,23 @@ public class CalendarAdapter extends BaseAdapter {
                 mEventColor = mContext.getResources().getColor(R.color.default_event_color);
             }
 
+            if (mPastFutureCalendarCellBackgroundColor == -1) {
+                mPastFutureCalendarCellBackgroundColor = mContext.getResources().getColor(R.color.gray);
+            }
+
+            if (mPastFutureCalendarCellTextColor == -1) {
+                mPastFutureCalendarCellTextColor = defaultTextColor;
+            }
+
+            if (mPastFutureEventColor == -1) {
+                mPastFutureEventColor = defaultTextColor;
+            }
+
             return new CalendarAdapter(mContext, months, mDaysOfWeekStrings, mTitleTypeface,
                     mDaysOfWeekTypeface, mCalendarCellTypeface, mTitleTextColor,
-                    mDaysOfWeekTextColor, mCalendarCellTextColor, mEventColor, mListener);
+                    mDaysOfWeekTextColor, mCalendarCellTextColor, mEventColor,
+                    mPastFutureCalendarCellBackgroundColor, mPastFutureCalendarCellTextColor,
+                    mPastFutureEventColor, mListener);
         }
     }
 }

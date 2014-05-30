@@ -44,11 +44,12 @@ public class CalendarCell extends View {
 
     private RelativeMonth mRelativeMonth;
 
-    private int mCurrentMonthBackgroundColor;
-    private int mOtherMonthBackgroundColor;
+    private int mTextColor;
+    private int mEventColor;
 
-    private int mCurrentMonthEventColor;
-    private int mOtherMonthEventColor;
+    private int mPastFutureCalendarCellBackgroundColor;
+    private int mPastFutureCalendarCellTextColor;
+    private int mPastFutureEventColor;
 
     public CalendarCell(Context context) {
         this(context, null);
@@ -67,11 +68,6 @@ public class CalendarCell extends View {
 
         mPlusPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-        mCurrentMonthBackgroundColor = Color.WHITE;
-
-        mOtherMonthBackgroundColor = context.getResources().getColor(R.color.gray);
-        mOtherMonthEventColor = context.getResources().getColor(R.color.default_text_color);
-
         int height = (int) (context.getResources().getDisplayMetrics().widthPixels / 7.f);
         setMinimumHeight(height);
     }
@@ -82,7 +78,7 @@ public class CalendarCell extends View {
     }
 
     public void setTextColor(int textColor) {
-        mTextPaint.setColor(textColor);
+        mTextColor = textColor;
     }
 
     public void setTypeface(Typeface typeface) {
@@ -95,7 +91,7 @@ public class CalendarCell extends View {
     }
 
     public void setEventColor(int eventColor) {
-        mCurrentMonthEventColor = eventColor;
+        mEventColor = eventColor;
     }
 
     public void setNumEvents(int numEvents) {
@@ -199,17 +195,31 @@ public class CalendarCell extends View {
         }
     }
 
+    public void setPastFutureCalendarCellBackgroundColor(int pastFutureCalendarCellBackgroundColor) {
+        mPastFutureCalendarCellBackgroundColor = pastFutureCalendarCellBackgroundColor;
+    }
+
+    public void setPastFutureCalendarCellTextColor(int pastFutureCalendarCellTextColor) {
+        mPastFutureCalendarCellTextColor = pastFutureCalendarCellTextColor;
+    }
+
+    public void setPastFutureEventColor(int pastFutureEventColor) {
+        mPastFutureEventColor = pastFutureEventColor;
+    }
+
     public void setRelativeMonth(RelativeMonth relativeMonth) {
         mRelativeMonth = relativeMonth;
 
         if (relativeMonth == RelativeMonth.CURRENT) {
             setBackgroundColor(Color.TRANSPARENT);
-            mEventPaint.setColor(mCurrentMonthEventColor);
-            mPlusPaint.setColor(mCurrentMonthEventColor);
+            mTextPaint.setColor(mTextColor);
+            mEventPaint.setColor(mEventColor);
+            mPlusPaint.setColor(mEventColor);
         } else {
-            setBackgroundColor(mOtherMonthBackgroundColor);
-            mEventPaint.setColor(mOtherMonthEventColor);
-            mPlusPaint.setColor(mOtherMonthEventColor);
+            setBackgroundColor(mPastFutureCalendarCellBackgroundColor);
+            mTextPaint.setColor(mPastFutureCalendarCellTextColor);
+            mEventPaint.setColor(mPastFutureEventColor);
+            mPlusPaint.setColor(mPastFutureEventColor);
         }
     }
 

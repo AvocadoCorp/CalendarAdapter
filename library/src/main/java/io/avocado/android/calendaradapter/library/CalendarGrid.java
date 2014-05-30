@@ -25,6 +25,10 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
     private Date mSomeDateInMonth;
 
+    private int mPastFutureCalendarCellBackgroundColor;
+    private int mPastFutureCalendarCellTextColor;
+    private int mPastFutureEventColor;
+
     public CalendarAdapter.OnDateSelectedListener mListener;
 
     public CalendarGrid(Context context) {
@@ -80,10 +84,6 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
                 calendarCell.setTypeface(mTypeface);
             }
 
-            if (mTextColor != -1) {
-                calendarCell.setTextColor(mTextColor);
-            }
-
             int dayNum;
             CalendarCell.RelativeMonth relativeMonth;
 
@@ -105,7 +105,11 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
             }
 
             calendarCell.setDayOfMonth(dayNum);
+            calendarCell.setTextColor(mTextColor);
             calendarCell.setEventColor(mEventColor);
+            calendarCell.setPastFutureCalendarCellBackgroundColor(mPastFutureCalendarCellBackgroundColor);
+            calendarCell.setPastFutureCalendarCellTextColor(mPastFutureCalendarCellTextColor);
+            calendarCell.setPastFutureEventColor(mPastFutureEventColor);
             calendarCell.setRelativeMonth(relativeMonth);
             calendarCell.setOnClickListener(this);
 
@@ -137,6 +141,18 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
     public void setOnDateSelectedListener(CalendarAdapter.OnDateSelectedListener listener) {
         mListener = listener;
+    }
+
+    public void setPastFutureCalendarCellBackgroundColor(int pastFutureCalendarCellBackgroundColor) {
+        mPastFutureCalendarCellBackgroundColor = pastFutureCalendarCellBackgroundColor;
+    }
+
+    public void setPastFutureCalendarCellTextColor(int pastFutureCalendarCellTextColor) {
+        mPastFutureCalendarCellTextColor = pastFutureCalendarCellTextColor;
+    }
+
+    public void setPastFutureEventColor(int pastFutureEventColor) {
+        mPastFutureEventColor = pastFutureEventColor;
     }
 
     @Override

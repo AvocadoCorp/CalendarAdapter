@@ -36,8 +36,10 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
                 "fonts/Roboto-Light.ttf");
 
         int mainTextColor = getResources().getColor(R.color.main_text);
-
         int eventColor = getResources().getColor(R.color.event_color);
+        int pastFutureCalendarCellBackgroundColor = getResources().getColor(R.color.past_future_background);
+        int pastFutureCalendarCellTextColor = getResources().getColor(R.color.past_future_text);
+        int pastFutureEventColor = getResources().getColor(R.color.past_future_event);
 
         CalendarAdapter adapter = new CalendarAdapter.Builder(this)
                 .titleTypeface(titleTypeface)
@@ -49,7 +51,11 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
                 .startDate(new Date())
                 .endDate(endCalendar.getTime())
                 .eventColor(eventColor)
+                .pastFutureCalendarCellBackgroundColor(pastFutureCalendarCellBackgroundColor)
+                .pastFutureCalendarCellTextColor(pastFutureCalendarCellTextColor)
+                .pastFutureEventColor(pastFutureEventColor)
                 .onDateSelectedListener(this)
+                .daysOfWeekStrings(new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"})
                 .create();
 
         mCalendarListView.setAdapter(adapter);
