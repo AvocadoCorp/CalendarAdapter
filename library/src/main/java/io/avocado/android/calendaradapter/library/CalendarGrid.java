@@ -30,8 +30,6 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
     private int mPastFutureCalendarCellTextColor;
     private int mPastFutureEventColor;
 
-    private List<Date> mEventDates;
-
     public CalendarAdapter.OnDateSelectedListener mListener;
 
     public CalendarGrid(Context context) {
@@ -64,7 +62,7 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
         }
     }
 
-    public void initCalendar(Date someDateInMonth) {
+    public void initCalendar(Date someDateInMonth, List<Date> currentMonthEventDates) {
         mSomeDateInMonth = someDateInMonth;
         int daysInCurrentMonth = CalendarUtils.getNumberOfDaysInMonth(someDateInMonth);
         int daysInPreviousMonth = CalendarUtils.getNumberOfDaysInPreviousMonth(someDateInMonth);
@@ -73,7 +71,7 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
         Calendar cal = Calendar.getInstance();
         int[] eventsPerDay = new int[42];
-        for (Date date : mEventDates) {
+        for (Date date : currentMonthEventDates) {
             cal.setTime(date);
             int calPos = daysToShowInPreviousMonthBeforeThisMonth + cal.get(Calendar.DAY_OF_MONTH) - 1;
             eventsPerDay[calPos] += 1;
@@ -154,10 +152,6 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
     public void setPastFutureEventColor(int pastFutureEventColor) {
         mPastFutureEventColor = pastFutureEventColor;
-    }
-
-    public void setEventDates(List<Date> eventDates) {
-        mEventDates = eventDates;
     }
 
     @Override
