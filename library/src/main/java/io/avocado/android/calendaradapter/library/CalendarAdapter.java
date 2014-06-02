@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -20,7 +21,7 @@ import java.util.Locale;
 /**
  * Created by matthewlogan on 5/21/14.
  */
-public class CalendarAdapter extends BaseAdapter {
+public class CalendarAdapter extends BaseAdapter implements ListAdapter {
 
     private Context mContext;
 
