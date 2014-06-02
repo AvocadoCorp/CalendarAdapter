@@ -8,6 +8,8 @@ import android.widget.ListView;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Set;
+import java.util.TreeSet;
 
 import io.avocado.android.calendaradapter.library.CalendarAdapter;
 
@@ -23,8 +25,11 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
 
         mCalendarListView = (ListView) findViewById(R.id.calendar_list);
 
+        Date startDate = new Date();
+
         Calendar endCalendar = Calendar.getInstance();
-        endCalendar.add(Calendar.MONTH, 15);
+        endCalendar.add(Calendar.MONTH, 12);
+        Date endDate = endCalendar.getTime();
 
         Typeface titleTypeface = Typeface.createFromAsset(getAssets(),
                 "fonts/Roboto-Thin.ttf");
@@ -41,6 +46,17 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
         int pastFutureCalendarCellTextColor = getResources().getColor(R.color.past_future_text);
         int pastFutureEventColor = getResources().getColor(R.color.past_future_event);
 
+        Set<Date> eventDates = new TreeSet<Date>();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDate);
+        while (cal.getTime().before(endDate)) {
+            if (cal.get(Calendar.DAY_OF_MONTH) % 5 == 0) {
+                eventDates.add(cal.getTime());
+            }
+
+            cal.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
         CalendarAdapter adapter = new CalendarAdapter.Builder(this)
                 .titleTypeface(titleTypeface)
                 .titleTextColor(mainTextColor)
@@ -48,12 +64,13 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
                 .daysOfWeekTextColor(mainTextColor)
                 .calendarCellTypeface(calendarCellTypeface)
                 .calendarCellTextColor(mainTextColor)
-                .startDate(new Date())
-                .endDate(endCalendar.getTime())
+                .startDate(startDate)
+                .endDate(endDate)
                 .eventColor(eventColor)
                 .pastFutureCalendarCellBackgroundColor(pastFutureCalendarCellBackgroundColor)
                 .pastFutureCalendarCellTextColor(pastFutureCalendarCellTextColor)
                 .pastFutureEventColor(pastFutureEventColor)
+                .eventDates(eventDates)
                 .onDateSelectedListener(this)
                 .create();
 

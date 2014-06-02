@@ -2,6 +2,7 @@ package io.avocado.android.calendaradapter.library;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by matthewlogan on 5/21/14.
@@ -40,6 +45,8 @@ public class CalendarAdapter extends BaseAdapter {
     private int mPastFutureCalendarCellTextColor;
     private int mPastFutureEventColor;
 
+    private List<Set<Date>> mEventDatesInEachMonth;
+
     private OnDateSelectedListener mListener;
 
     private static SimpleDateFormat mMonthFormat = new SimpleDateFormat("MMMM", Locale.getDefault());
@@ -55,6 +62,7 @@ public class CalendarAdapter extends BaseAdapter {
                             int daysOfWeekTextColor, int calendarCellTextColor, int eventColor,
                             int pastFutureCalendarCellBackgroundColor,
                             int pastFutureCalendarCellTextColor, int pastFutureEventColor,
+                            List<Set<Date>> eventDatesInEachMonth,
                             OnDateSelectedListener listener) {
 
         mContext = context;
@@ -70,6 +78,7 @@ public class CalendarAdapter extends BaseAdapter {
         mPastFutureCalendarCellBackgroundColor = pastFutureCalendarCellBackgroundColor;
         mPastFutureCalendarCellTextColor = pastFutureCalendarCellTextColor;
         mPastFutureEventColor = pastFutureEventColor;
+        mEventDatesInEachMonth = eventDatesInEachMonth;
         mListener = listener;
     }
 
@@ -146,6 +155,7 @@ public class CalendarAdapter extends BaseAdapter {
             vh.calendarGrid.setPastFutureCalendarCellTextColor(mPastFutureCalendarCellTextColor);
             vh.calendarGrid.setPastFutureEventColor(mPastFutureEventColor);
             vh.calendarGrid.setOnDateSelectedListener(mListener);
+            vh.calendarGrid.setEventDates(mEventDatesInEachMonth.get(position));
 
             convertView.setTag(vh);
         }
@@ -181,6 +191,8 @@ public class CalendarAdapter extends BaseAdapter {
         private int mPastFutureCalendarCellBackgroundColor = -1;
         private int mPastFutureCalendarCellTextColor = -1;
         private int mPastFutureEventColor = -1;
+
+        private Set<Date> mEventDates;
 
         private OnDateSelectedListener mListener;
 
@@ -253,6 +265,11 @@ public class CalendarAdapter extends BaseAdapter {
             return this;
         }
 
+        public Builder eventDates(Set<Date> eventDates) {
+            mEventDates = eventDates;
+            return this;
+        }
+
         public CalendarAdapter create() {
 
             if (mContext == null) {
@@ -285,6 +302,38 @@ public class CalendarAdapter extends BaseAdapter {
                 months[i] = cal.getTime();
                 cal.add(Calendar.MONTH, 1);
             }
+
+            Log.d("testing", "time 1: " + System.currentTimeMillis());
+
+            List<Set<Date>> eventDatesInEachMonth = new ArrayList<Set<Date>>();
+
+            Calendar monthCal = Calendar.getInstance();
+            Calendar eventCal = Calendar.getInstance();
+
+            for (Date monthDate : months) {
+
+                monthCal.setTime(monthDate);
+
+                Set<Date> eventDatesInMonth = new TreeSet<Date>();
+
+                for (Date eventDate : mEventDates) {
+
+                    eventCal.setTime(eventDate);
+
+                    if (monthCal.get(Calendar.YEAR) == eventCal.get(Calendar.YEAR) &&
+                            monthCal.get(Calendar.MONTH) == eventCal.get(Calendar.MONTH)) {
+
+                        eventDatesInMonth.add(eventDate);
+
+                    }
+
+                }
+
+                eventDatesInEachMonth.add(eventDatesInMonth);
+
+            }
+
+            Log.d("testing", "time 2: " + System.currentTimeMillis());
 
             mDaysOfWeekStrings = new String[7];
             cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
@@ -339,7 +388,7 @@ public class CalendarAdapter extends BaseAdapter {
                     mDaysOfWeekTypeface, mCalendarCellTypeface, mTitleTextColor,
                     mDaysOfWeekTextColor, mCalendarCellTextColor, mEventColor,
                     mPastFutureCalendarCellBackgroundColor, mPastFutureCalendarCellTextColor,
-                    mPastFutureEventColor, mListener);
+                    mPastFutureEventColor, eventDatesInEachMonth, mListener);
         }
     }
 }
