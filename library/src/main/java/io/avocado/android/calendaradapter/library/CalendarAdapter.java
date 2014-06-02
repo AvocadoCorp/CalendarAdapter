@@ -16,8 +16,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * Created by matthewlogan on 5/21/14.
@@ -44,7 +42,7 @@ public class CalendarAdapter extends BaseAdapter {
     private int mPastFutureCalendarCellTextColor;
     private int mPastFutureEventColor;
 
-    private List<Set<Date>> mEventDatesInEachMonth;
+    private List<List<Date>> mEventDatesInEachMonth;
 
     private OnDateSelectedListener mListener;
 
@@ -61,7 +59,7 @@ public class CalendarAdapter extends BaseAdapter {
                             int daysOfWeekTextColor, int calendarCellTextColor, int eventColor,
                             int pastFutureCalendarCellBackgroundColor,
                             int pastFutureCalendarCellTextColor, int pastFutureEventColor,
-                            List<Set<Date>> eventDatesInEachMonth,
+                            List<List<Date>> eventDatesInEachMonth,
                             OnDateSelectedListener listener) {
 
         mContext = context;
@@ -168,6 +166,29 @@ public class CalendarAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public void addEventDate(Date eventDate) {
+        Calendar eventCal = Calendar.getInstance();
+        eventCal.setTime(eventDate);
+
+        Calendar monthCal = Calendar.getInstance();
+
+        for (int i = 0; i < mMonths.length; i++) {
+            monthCal.setTime(mMonths[i]);
+
+            if (monthCal.get(Calendar.YEAR) == eventCal.get(Calendar.YEAR) &&
+                    monthCal.get(Calendar.MONTH) == eventCal.get(Calendar.MONTH)) {
+
+                mEventDatesInEachMonth.get(i).add(eventDate);
+            }
+        }
+    }
+
+    public void addEventDates(List<Date> eventDates) {
+        for (Date eventDate : eventDates) {
+            addEventDate(eventDate);
+        }
+    }
+
     @Override
     public boolean isEnabled(int position) {
         return false;
@@ -196,7 +217,7 @@ public class CalendarAdapter extends BaseAdapter {
         private int mPastFutureCalendarCellTextColor = -1;
         private int mPastFutureEventColor = -1;
 
-        private Set<Date> mEventDates;
+        private List<Date> mEventDates;
 
         private OnDateSelectedListener mListener;
 
@@ -269,7 +290,7 @@ public class CalendarAdapter extends BaseAdapter {
             return this;
         }
 
-        public Builder eventDates(Set<Date> eventDates) {
+        public Builder eventDates(List<Date> eventDates) {
             mEventDates = eventDates;
             return this;
         }
@@ -307,12 +328,12 @@ public class CalendarAdapter extends BaseAdapter {
                 cal.add(Calendar.MONTH, 1);
             }
 
-            List<Set<Date>> eventDatesInEachMonth = new ArrayList<Set<Date>>();
+            List<List<Date>> eventDatesInEachMonth = new ArrayList<List<Date>>();
             Calendar monthCal = Calendar.getInstance();
             Calendar eventCal = Calendar.getInstance();
             for (Date monthDate : months) {
                 monthCal.setTime(monthDate);
-                Set<Date> eventDatesInMonth = new TreeSet<Date>();
+                List<Date> eventDatesInMonth = new ArrayList<Date>();
                 for (Date eventDate : mEventDates) {
                     eventCal.setTime(eventDate);
                     if (monthCal.get(Calendar.YEAR) == eventCal.get(Calendar.YEAR) &&

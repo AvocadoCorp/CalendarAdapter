@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by matthewlogan on 5/22/14.
@@ -30,7 +30,7 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
     private int mPastFutureCalendarCellTextColor;
     private int mPastFutureEventColor;
 
-    private Set<Date> mEventDates;
+    private List<Date> mEventDates;
 
     public CalendarAdapter.OnDateSelectedListener mListener;
 
@@ -157,7 +157,7 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
         mPastFutureEventColor = pastFutureEventColor;
     }
 
-    public void setEventDates(Set<Date> eventDates) {
+    public void setEventDates(List<Date> eventDates) {
         mEventDates = eventDates;
     }
 

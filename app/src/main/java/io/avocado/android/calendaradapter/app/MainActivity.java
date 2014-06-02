@@ -6,15 +6,17 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.List;
 
 import io.avocado.android.calendaradapter.library.CalendarAdapter;
 
 
 public class MainActivity extends ActionBarActivity implements CalendarAdapter.OnDateSelectedListener {
+
+    private CalendarAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,7 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
         int pastFutureCalendarCellTextColor = getResources().getColor(R.color.past_future_text);
         int pastFutureEventColor = getResources().getColor(R.color.past_future_event);
 
-        Set<Date> eventDates = new TreeSet<Date>();
+        List<Date> eventDates = new ArrayList<Date>();
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
         while (cal.getTime().before(endDate)) {
@@ -55,7 +57,7 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
             cal.add(Calendar.DAY_OF_MONTH, 1);
         }
 
-        CalendarAdapter adapter = new CalendarAdapter.Builder(this)
+        mAdapter = new CalendarAdapter.Builder(this)
                 .titleTypeface(titleTypeface)
                 .titleTextColor(mainTextColor)
                 .daysOfWeekTypeface(daysOfWeekTypeface)
@@ -72,11 +74,14 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
                 .onDateSelectedListener(this)
                 .create();
 
-        calendarListView.setAdapter(adapter);
+        calendarListView.setAdapter(mAdapter);
     }
 
     @Override
     public void onDateSelected(Date date) {
         Log.d("testing", "On date selected: " + date);
+
+        mAdapter.addEventDate(date);
+        mAdapter.notifyDataSetChanged();
     }
 }
