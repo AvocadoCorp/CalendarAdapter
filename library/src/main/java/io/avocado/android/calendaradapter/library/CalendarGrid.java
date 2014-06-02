@@ -62,7 +62,8 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
         }
     }
 
-    public void initCalendar(Date someDateInMonth, List<Date> currentMonthEventDates) {
+    public void initCalendar(Date someDateInMonth, List<Date> currentMonthEventDates,
+                             List<Date> previousMonthEventDates, List<Date> nextMonthEventDates) {
         mSomeDateInMonth = someDateInMonth;
         int daysInCurrentMonth = CalendarUtils.getNumberOfDaysInMonth(someDateInMonth);
         int daysInPreviousMonth = CalendarUtils.getNumberOfDaysInPreviousMonth(someDateInMonth);
@@ -71,10 +72,33 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
         Calendar cal = Calendar.getInstance();
         int[] eventsPerDay = new int[42];
+
         for (Date date : currentMonthEventDates) {
             cal.setTime(date);
             int calPos = daysToShowInPreviousMonthBeforeThisMonth + cal.get(Calendar.DAY_OF_MONTH) - 1;
             eventsPerDay[calPos] += 1;
+        }
+
+        if (previousMonthEventDates != null) {
+            for (Date date : previousMonthEventDates) {
+                cal.setTime(date);
+                int calPos = daysToShowInPreviousMonthBeforeThisMonth -
+                        (daysInPreviousMonth - cal.get(Calendar.DAY_OF_MONTH));
+                if (calPos >= 0) {
+                    eventsPerDay[calPos] += 1;
+                }
+            }
+        }
+
+        if (nextMonthEventDates != null) {
+            for (Date date : nextMonthEventDates) {
+                cal.setTime(date);
+                int calPos = daysToShowInPreviousMonthBeforeThisMonth + daysInCurrentMonth
+                        + cal.get(Calendar.DAY_OF_MONTH) - 1;
+                if (calPos < 42) {
+                    eventsPerDay[calPos] += 1;
+                }
+            }
         }
 
         for (int calPosition = 0; calPosition < 42; calPosition++) {

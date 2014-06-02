@@ -160,7 +160,14 @@ public class CalendarAdapter extends BaseAdapter {
         String prettyMonth = mMonthFormat.format(mMonths[position]);
         vh.titleView.setText(prettyMonth);
 
-        vh.calendarGrid.initCalendar(mMonths[position], mEventDatesInEachMonth.get(position));
+        List<Date> previousMonthEventDates = position != 0 ?
+                mEventDatesInEachMonth.get(position - 1) : null;
+
+        List<Date> nextMonthEventDates = position != mMonths.length - 1 ?
+                mEventDatesInEachMonth.get(position + 1) : null;
+
+        vh.calendarGrid.initCalendar(mMonths[position], mEventDatesInEachMonth.get(position),
+                previousMonthEventDates, nextMonthEventDates);
 
         return convertView;
     }
@@ -329,8 +336,6 @@ public class CalendarAdapter extends BaseAdapter {
 
             List<List<Date>> eventDatesInEachMonth = new ArrayList<List<Date>>();
             Calendar monthCal = Calendar.getInstance();
-
-
             Calendar eventCal = Calendar.getInstance();
             for (Date monthDate : months) {
                 monthCal.setTime(monthDate);
