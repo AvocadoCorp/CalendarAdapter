@@ -55,7 +55,6 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
                 .pastFutureCalendarCellTextColor(pastFutureCalendarCellTextColor)
                 .pastFutureEventColor(pastFutureEventColor)
                 .onDateSelectedListener(this)
-                .daysOfWeekStrings(new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"})
                 .create();
 
         mCalendarListView.setAdapter(adapter);

@@ -42,12 +42,12 @@ public class CalendarAdapter extends BaseAdapter {
 
     private OnDateSelectedListener mListener;
 
-    private SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("MMMM", Locale.getDefault());
+    private static SimpleDateFormat mMonthFormat = new SimpleDateFormat("MMMM", Locale.getDefault());
+    private static SimpleDateFormat mDayOfWeekFormat = new SimpleDateFormat("EEE", Locale.getDefault());
 
     public interface OnDateSelectedListener {
         public void onDateSelected(Date date);
     }
-
 
     private CalendarAdapter(Context context, Date[] months, String[] daysOfWeekStrings,
                             Typeface titleTypeface, Typeface daysOfWeekTypeface,
@@ -151,7 +151,7 @@ public class CalendarAdapter extends BaseAdapter {
         }
         ViewHolder vh = (ViewHolder) convertView.getTag();
 
-        String prettyMonth = mSimpleDateFormat.format(mMonths[position]);
+        String prettyMonth = mMonthFormat.format(mMonths[position]);
         vh.titleView.setText(prettyMonth);
 
         vh.calendarGrid.initCalendar(mMonths[position]);
@@ -195,11 +195,6 @@ public class CalendarAdapter extends BaseAdapter {
 
         public Builder endDate(Date someDateInEndMonth) {
             mEndDate = someDateInEndMonth;
-            return this;
-        }
-
-        public Builder daysOfWeekStrings(String[] daysOfWeekStrings) {
-            mDaysOfWeekStrings = daysOfWeekStrings;
             return this;
         }
 
@@ -291,10 +286,11 @@ public class CalendarAdapter extends BaseAdapter {
                 cal.add(Calendar.MONTH, 1);
             }
 
-            if (mDaysOfWeekStrings == null) {
-                mDaysOfWeekStrings = new String[]{
-                        "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
-                };
+            mDaysOfWeekStrings = new String[7];
+            cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+            for (int i = 0; i < 7; i++) {
+                mDaysOfWeekStrings[i] = mDayOfWeekFormat.format(cal.getTime());
+                cal.add(Calendar.DAY_OF_WEEK, 1);
             }
 
             if (mTitleTypeface == null) {
