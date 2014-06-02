@@ -19,6 +19,7 @@ public class CalendarCell extends View {
     private Paint mEventPaint;
     private Paint mTextPaint;
     private Paint mPlusPaint;
+    private Paint mBackgroundPaint;
 
     private ArrayList<Rect> mOddNumEventRects = new ArrayList<Rect>();
     private ArrayList<Rect> mEvenNumEventRects = new ArrayList<Rect>();
@@ -57,6 +58,8 @@ public class CalendarCell extends View {
 
     public CalendarCell(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        mBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
         mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setTextSize((int) context.getResources().getDimension(R.dimen.cell_text_size));
@@ -183,6 +186,8 @@ public class CalendarCell extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        canvas.drawPaint(mBackgroundPaint);
+
         canvas.drawText(mDateText, mTextOrigin[0], mTextOrigin[1], mTextPaint);
 
         for (int i = 0; i < mNumRectsToDraw; i++) {
@@ -211,12 +216,12 @@ public class CalendarCell extends View {
         mRelativeMonth = relativeMonth;
 
         if (relativeMonth == RelativeMonth.CURRENT) {
-            setBackgroundColor(Color.TRANSPARENT);
+            mBackgroundPaint.setColor(Color.TRANSPARENT);
             mTextPaint.setColor(mTextColor);
             mEventPaint.setColor(mEventColor);
             mPlusPaint.setColor(mEventColor);
         } else {
-            setBackgroundColor(mPastFutureCalendarCellBackgroundColor);
+            mBackgroundPaint.setColor(mPastFutureCalendarCellBackgroundColor);
             mTextPaint.setColor(mPastFutureCalendarCellTextColor);
             mEventPaint.setColor(mPastFutureEventColor);
             mPlusPaint.setColor(mPastFutureEventColor);
