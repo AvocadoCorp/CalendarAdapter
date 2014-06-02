@@ -303,8 +303,6 @@ public class CalendarAdapter extends BaseAdapter {
                 cal.add(Calendar.MONTH, 1);
             }
 
-            Log.d("testing", "time 1: " + System.currentTimeMillis());
-
             List<Set<Date>> eventDatesInEachMonth = new ArrayList<Set<Date>>();
 
             Calendar monthCal = Calendar.getInstance();
@@ -332,8 +330,6 @@ public class CalendarAdapter extends BaseAdapter {
                 eventDatesInEachMonth.add(eventDatesInMonth);
 
             }
-
-            Log.d("testing", "time 2: " + System.currentTimeMillis());
 
             mDaysOfWeekStrings = new String[7];
             cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);

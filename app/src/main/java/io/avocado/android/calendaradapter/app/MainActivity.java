@@ -28,7 +28,7 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
         Date startDate = new Date();
 
         Calendar endCalendar = Calendar.getInstance();
-        endCalendar.add(Calendar.MONTH, 12);
+        endCalendar.add(Calendar.MONTH, 3);
         Date endDate = endCalendar.getTime();
 
         Typeface titleTypeface = Typeface.createFromAsset(getAssets(),
