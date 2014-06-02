@@ -25,7 +25,9 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
 
         ListView calendarListView = (ListView) findViewById(R.id.calendar_list);
 
-        Date startDate = new Date();
+        Calendar startCalendar = Calendar.getInstance();
+        startCalendar.add(Calendar.MONTH, -1);
+        Date startDate = startCalendar.getTime();
 
         Calendar endCalendar = Calendar.getInstance();
         endCalendar.add(Calendar.MONTH, 3);
@@ -80,8 +82,6 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
 
     @Override
     public void onDateSelected(Date date) {
-        Log.d("testing", "On date selected: " + date);
-
         mAdapter.addEventDate(date);
         mAdapter.notifyDataSetChanged();
     }
