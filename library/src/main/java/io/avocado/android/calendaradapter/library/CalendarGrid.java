@@ -72,11 +72,10 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
                 = CalendarUtils.getNumberOfDaysToShowInPreviousMonthBeforeThisMonth(someDateInMonth);
 
         Calendar cal = Calendar.getInstance();
-        int calPos;
         int[] eventsPerDay = new int[42];
         for (Date date : mEventDates) {
             cal.setTime(date);
-            calPos = daysToShowInPreviousMonthBeforeThisMonth + cal.get(Calendar.DAY_OF_MONTH) - 1;
+            int calPos = daysToShowInPreviousMonthBeforeThisMonth + cal.get(Calendar.DAY_OF_MONTH) - 1;
             eventsPerDay[calPos] += 1;
         }
 
