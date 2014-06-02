@@ -152,7 +152,6 @@ public class CalendarAdapter extends BaseAdapter {
             vh.calendarGrid.setPastFutureCalendarCellTextColor(mPastFutureCalendarCellTextColor);
             vh.calendarGrid.setPastFutureEventColor(mPastFutureEventColor);
             vh.calendarGrid.setOnDateSelectedListener(mListener);
-            vh.calendarGrid.setEventDates(mEventDatesInEachMonth.get(position));
 
             convertView.setTag(vh);
         }
@@ -161,6 +160,7 @@ public class CalendarAdapter extends BaseAdapter {
         String prettyMonth = mMonthFormat.format(mMonths[position]);
         vh.titleView.setText(prettyMonth);
 
+        vh.calendarGrid.setEventDates(mEventDatesInEachMonth.get(position));
         vh.calendarGrid.initCalendar(mMonths[position]);
 
         return convertView;
