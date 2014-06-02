@@ -160,14 +160,8 @@ public class CalendarAdapter extends BaseAdapter {
         String prettyMonth = mMonthFormat.format(mMonths[position]);
         vh.titleView.setText(prettyMonth);
 
-        List<Date> previousMonthEventDates = position != 0 ?
-                mEventDatesInEachMonth.get(position - 1) : null;
-
-        List<Date> nextMonthEventDates = position != mMonths.length - 1 ?
-                mEventDatesInEachMonth.get(position + 1) : null;
-
-        vh.calendarGrid.initCalendar(mMonths[position], mEventDatesInEachMonth.get(position),
-                previousMonthEventDates, nextMonthEventDates);
+        vh.calendarGrid.initCalendar(mMonths[position], mEventDatesInEachMonth.get(position + 1),
+                mEventDatesInEachMonth.get(position), mEventDatesInEachMonth.get(position + 2));
 
         return convertView;
     }
@@ -177,15 +171,17 @@ public class CalendarAdapter extends BaseAdapter {
         eventCal.setTime(eventDate);
 
         Calendar monthCal = Calendar.getInstance();
+        monthCal.setTime(mMonths[0]);
+        monthCal.add(Calendar.MONTH, -1);
 
-        for (int i = 0; i < mMonths.length; i++) {
-            monthCal.setTime(mMonths[i]);
-
+        for (List<Date> eventDatesInMonth : mEventDatesInEachMonth) {
             if (monthCal.get(Calendar.YEAR) == eventCal.get(Calendar.YEAR) &&
                     monthCal.get(Calendar.MONTH) == eventCal.get(Calendar.MONTH)) {
 
-                mEventDatesInEachMonth.get(i).add(eventDate);
+                eventDatesInMonth.add(eventDate);
             }
+
+            monthCal.add(Calendar.MONTH, 1);
         }
     }
 
@@ -336,9 +332,11 @@ public class CalendarAdapter extends BaseAdapter {
 
             List<List<Date>> eventDatesInEachMonth = new ArrayList<List<Date>>();
             Calendar monthCal = Calendar.getInstance();
+            monthCal.setTime(months[0]);
+            monthCal.add(Calendar.MONTH, -1);
+
             Calendar eventCal = Calendar.getInstance();
-            for (Date monthDate : months) {
-                monthCal.setTime(monthDate);
+            for (int i = 0; i <= months.length + 1; i++) {
                 List<Date> eventDatesInMonth = new ArrayList<Date>();
                 for (Date eventDate : mEventDates) {
                     eventCal.setTime(eventDate);
@@ -348,6 +346,7 @@ public class CalendarAdapter extends BaseAdapter {
                     }
                 }
                 eventDatesInEachMonth.add(eventDatesInMonth);
+                monthCal.add(Calendar.MONTH, 1);
             }
 
             mDaysOfWeekStrings = new String[7];

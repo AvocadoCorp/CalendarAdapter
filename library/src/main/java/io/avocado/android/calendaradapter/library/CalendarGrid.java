@@ -3,6 +3,7 @@ package io.avocado.android.calendaradapter.library;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -72,32 +73,29 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
         Calendar cal = Calendar.getInstance();
         int[] eventsPerDay = new int[42];
+        int calPos;
 
         for (Date date : currentMonthEventDates) {
             cal.setTime(date);
-            int calPos = daysToShowInPreviousMonthBeforeThisMonth + cal.get(Calendar.DAY_OF_MONTH) - 1;
+            calPos = daysToShowInPreviousMonthBeforeThisMonth + cal.get(Calendar.DAY_OF_MONTH) - 1;
             eventsPerDay[calPos] += 1;
         }
 
-        if (previousMonthEventDates != null) {
-            for (Date date : previousMonthEventDates) {
-                cal.setTime(date);
-                int calPos = daysToShowInPreviousMonthBeforeThisMonth -
-                        (daysInPreviousMonth - cal.get(Calendar.DAY_OF_MONTH));
-                if (calPos >= 0) {
-                    eventsPerDay[calPos] += 1;
-                }
+        for (Date date : previousMonthEventDates) {
+            cal.setTime(date);
+            calPos = daysToShowInPreviousMonthBeforeThisMonth -
+                    (daysInPreviousMonth - cal.get(Calendar.DAY_OF_MONTH)) - 1;
+            if (calPos >= 0) {
+                eventsPerDay[calPos] += 1;
             }
         }
 
-        if (nextMonthEventDates != null) {
-            for (Date date : nextMonthEventDates) {
-                cal.setTime(date);
-                int calPos = daysToShowInPreviousMonthBeforeThisMonth + daysInCurrentMonth
-                        + cal.get(Calendar.DAY_OF_MONTH) - 1;
-                if (calPos < 42) {
-                    eventsPerDay[calPos] += 1;
-                }
+        for (Date date : nextMonthEventDates) {
+            cal.setTime(date);
+            calPos = daysToShowInPreviousMonthBeforeThisMonth + daysInCurrentMonth
+                    + cal.get(Calendar.DAY_OF_MONTH) - 1;
+            if (calPos < 42) {
+                eventsPerDay[calPos] += 1;
             }
         }
 

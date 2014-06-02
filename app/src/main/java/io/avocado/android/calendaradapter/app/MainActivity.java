@@ -3,7 +3,6 @@ package io.avocado.android.calendaradapter.app;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
 
         Calendar endCalendar = Calendar.getInstance();
         endCalendar.add(Calendar.MONTH, 3);
-        endCalendar.set(Calendar.DAY_OF_MONTH, 28);
+        endCalendar.set(Calendar.DAY_OF_MONTH, endCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         Date endDate = endCalendar.getTime();
 
         Typeface titleTypeface = Typeface.createFromAsset(getAssets(),
@@ -52,6 +51,7 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
         List<Date> eventDates = new ArrayList<Date>();
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
+        cal.add(Calendar.MONTH, -1);
         while (cal.getTime().before(endDate)) {
             if (cal.get(Calendar.DAY_OF_MONTH) % 5 == 0) {
                 eventDates.add(cal.getTime());
