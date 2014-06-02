@@ -16,14 +16,12 @@ import io.avocado.android.calendaradapter.library.CalendarAdapter;
 
 public class MainActivity extends ActionBarActivity implements CalendarAdapter.OnDateSelectedListener {
 
-    private ListView mCalendarListView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mCalendarListView = (ListView) findViewById(R.id.calendar_list);
+        ListView calendarListView = (ListView) findViewById(R.id.calendar_list);
 
         Date startDate = new Date();
 
@@ -74,7 +72,7 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
                 .onDateSelectedListener(this)
                 .create();
 
-        mCalendarListView.setAdapter(adapter);
+        calendarListView.setAdapter(adapter);
     }
 
     @Override
