@@ -2,7 +2,6 @@ package io.avocado.android.calendaradapter.library;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -169,6 +168,11 @@ public class CalendarAdapter extends BaseAdapter {
         return convertView;
     }
 
+    @Override
+    public boolean isEnabled(int position) {
+        return false;
+    }
+
     public static class Builder {
 
         private Context mContext;
@@ -304,31 +308,19 @@ public class CalendarAdapter extends BaseAdapter {
             }
 
             List<Set<Date>> eventDatesInEachMonth = new ArrayList<Set<Date>>();
-
             Calendar monthCal = Calendar.getInstance();
             Calendar eventCal = Calendar.getInstance();
-
             for (Date monthDate : months) {
-
                 monthCal.setTime(monthDate);
-
                 Set<Date> eventDatesInMonth = new TreeSet<Date>();
-
                 for (Date eventDate : mEventDates) {
-
                     eventCal.setTime(eventDate);
-
                     if (monthCal.get(Calendar.YEAR) == eventCal.get(Calendar.YEAR) &&
                             monthCal.get(Calendar.MONTH) == eventCal.get(Calendar.MONTH)) {
-
                         eventDatesInMonth.add(eventDate);
-
                     }
-
                 }
-
                 eventDatesInEachMonth.add(eventDatesInMonth);
-
             }
 
             mDaysOfWeekStrings = new String[7];
