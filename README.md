@@ -11,22 +11,22 @@ The API uses the builder pattern to construct the adapter with several (optional
 Add a `ListView` to your XML layout file:
 
 ```xml
-    <ListView
-        android:id="@+id/calendar_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+<ListView
+    android:id="@+id/calendar_list_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
 ```
 
 Grab a reference to it:
 
 ```java
-    ListView calendarListView = (ListView) findViewById(R.id.calendar_list_view);
+ListView calendarListView = (ListView) findViewById(R.id.calendar_list_view);
 ```
 
 Construct a `CalendarAdapter` with `CalendarAdapter.Builder`:
 
 ```java
-    CalendarAdapter adapter = new CalendarAdapter.Builder(this)
+CalendarAdapter adapter = new CalendarAdapter.Builder(this)
         .startDate(new Date())
         .endDate(lastCalendar.getTime())
         .eventDates(eventDates)
@@ -37,7 +37,7 @@ Construct a `CalendarAdapter` with `CalendarAdapter.Builder`:
 Then hand off the `CalendarAdapter` to your `ListView` and you're good to go:
 
 ```java
-    calendarListView.setAdapter(adapter);
+calendarListView.setAdapter(adapter);
 ```
 
 ## Customization
@@ -97,7 +97,7 @@ The color of the squares to symbolize events in calendar cells outside of the cu
 A listener that implements the method:
 
 ```java
-    public void onDateSelected(Date date)
+public void onDateSelected(Date date)
 ```
 
 ##### eventDates(List<Date> eventDates)
