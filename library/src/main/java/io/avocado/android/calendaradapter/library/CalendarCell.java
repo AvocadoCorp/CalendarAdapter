@@ -2,7 +2,6 @@ package io.avocado.android.calendaradapter.library;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -19,7 +18,7 @@ public class CalendarCell extends View {
     private Paint mEventPaint;
     private Paint mTextPaint;
     private Paint mPlusPaint;
-    private Paint mBackgroundPaint;
+    private Paint mPastFutureBackgroundPaint;
     private Paint mBorderPaint;
 
     private ArrayList<Rect> mOddNumEventRects = new ArrayList<Rect>();
@@ -37,20 +36,25 @@ public class CalendarCell extends View {
     private int mNumEvents;
     private int mNumRectsToDraw; // Including plus sign
 
-    private int mHeightMeasureSpec = 0;
-
     private static final int MAX_EVENTS = 3;
 
     public enum RelativeMonth {
         PREVIOUS, CURRENT, NEXT
     }
 
+    public enum GridPosition {
+        LEFT_EDGE, TOP_LEFT_CORNER, TOP_EDGE, TOP_RIGHT_CORNER, RIGHT_EDGE, BOTTOM_RIGHT_CORNER,
+        BOTTOM_EDGE, BOTTOM_LEFT_CORNER, INSIDE
+    }
+
+    private boolean mShouldDrawLeftBorder;
+    private boolean mShouldDrawTopBorder;
+
     private RelativeMonth mRelativeMonth;
 
     private int mTextColor;
     private int mEventColor;
 
-    private int mPastFutureCalendarCellBackgroundColor;
     private int mPastFutureCalendarCellTextColor;
     private int mPastFutureEventColor;
 
@@ -61,12 +65,11 @@ public class CalendarCell extends View {
     public CalendarCell(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        mBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPastFutureBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
         mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setTextSize((int) context.getResources().getDimension(R.dimen.cell_text_size));
         mTextPaint.setTextAlign(Paint.Align.CENTER);
-        mTextPaint.setColor(getResources().getColor(R.color.default_text_color));
 
         mEventPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mEventPaint.setStyle(Paint.Style.FILL);
@@ -74,15 +77,9 @@ public class CalendarCell extends View {
         mPlusPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
         mBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mBorderPaint.setColor(getResources().getColor(R.color.default_cell_border_color));
 
         int height = (int) (context.getResources().getDisplayMetrics().widthPixels / 7.f);
         setMinimumHeight(height);
-    }
-
-    @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, mHeightMeasureSpec);
     }
 
     public void setTextColor(int textColor) {
@@ -113,7 +110,7 @@ public class CalendarCell extends View {
     }
 
     @Override
-    protected void onSizeChanged (int w, int h, int oldw, int oldh) {
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
         mBorderRect = new Rect(0, h, w, 0);
@@ -197,14 +194,27 @@ public class CalendarCell extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.drawPaint(mBackgroundPaint);
+        if (mRelativeMonth != RelativeMonth.CURRENT) {
+            canvas.drawPaint(mPastFutureBackgroundPaint);
+        }
 
-        canvas.drawLine(mBorderRect.left, 0, mBorderRect.right, 0, mBorderPaint);
-        canvas.drawLine(mBorderRect.left, mBorderRect.top - 1, mBorderRect.right,
-                mBorderRect.top - 1, mBorderPaint);
-        canvas.drawLine(mBorderRect.left, mBorderRect.bottom, mBorderRect.left, mBorderRect.top,
-                mBorderPaint);
-        canvas.drawLine(mBorderRect.right - 1, mBorderRect.bottom, mBorderRect.right - 1,
+        if (mShouldDrawLeftBorder) {
+            // Left stroke
+            canvas.drawLine(mBorderRect.left, mBorderRect.bottom, mBorderRect.left, mBorderRect.top,
+                    mBorderPaint);
+        }
+
+        if (mShouldDrawTopBorder) {
+            // Top stroke
+            canvas.drawLine(mBorderRect.left, 0, mBorderRect.right, 0, mBorderPaint);
+        }
+
+        // Bottom stroke
+        canvas.drawLine(mBorderRect.left, mBorderRect.top, mBorderRect.right,
+                mBorderRect.top, mBorderPaint);
+
+        // Right stroke
+        canvas.drawLine(mBorderRect.right, mBorderRect.bottom, mBorderRect.right,
                 mBorderRect.top, mBorderPaint);
 
         canvas.drawText(mDateText, mTextOrigin[0], mTextOrigin[1], mTextPaint);
@@ -220,7 +230,7 @@ public class CalendarCell extends View {
     }
 
     public void setPastFutureCalendarCellBackgroundColor(int pastFutureCalendarCellBackgroundColor) {
-        mPastFutureCalendarCellBackgroundColor = pastFutureCalendarCellBackgroundColor;
+        mPastFutureBackgroundPaint.setColor(pastFutureCalendarCellBackgroundColor);
     }
 
     public void setPastFutureCalendarCellTextColor(int pastFutureCalendarCellTextColor) {
@@ -235,16 +245,24 @@ public class CalendarCell extends View {
         mRelativeMonth = relativeMonth;
 
         if (relativeMonth == RelativeMonth.CURRENT) {
-            mBackgroundPaint.setColor(Color.TRANSPARENT);
             mTextPaint.setColor(mTextColor);
             mEventPaint.setColor(mEventColor);
             mPlusPaint.setColor(mEventColor);
         } else {
-            mBackgroundPaint.setColor(mPastFutureCalendarCellBackgroundColor);
             mTextPaint.setColor(mPastFutureCalendarCellTextColor);
             mEventPaint.setColor(mPastFutureEventColor);
             mPlusPaint.setColor(mPastFutureEventColor);
         }
+    }
+
+    public void setGridPosition(GridPosition gridPosition) {
+        mShouldDrawLeftBorder = gridPosition == GridPosition.TOP_LEFT_CORNER ||
+                gridPosition == GridPosition.LEFT_EDGE ||
+                gridPosition == GridPosition.BOTTOM_LEFT_CORNER;
+
+        mShouldDrawTopBorder = gridPosition == GridPosition.TOP_LEFT_CORNER ||
+                gridPosition == GridPosition.TOP_EDGE ||
+                gridPosition == GridPosition.TOP_RIGHT_CORNER;
     }
 
     public RelativeMonth getRelativeMonth() {

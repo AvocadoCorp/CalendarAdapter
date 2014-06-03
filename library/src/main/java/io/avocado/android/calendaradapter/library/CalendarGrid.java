@@ -57,6 +57,26 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
                 cellLp.weight = 1;
                 calendarCell.setLayoutParams(cellLp);
 
+                if (i != 0 && i != 5 && j != 0 && j != 6) {
+                    calendarCell.setGridPosition(CalendarCell.GridPosition.INSIDE);
+                } else if (i == 0 && j == 0) {
+                    calendarCell.setGridPosition(CalendarCell.GridPosition.TOP_LEFT_CORNER);
+                } else if (i == 0 && j == 6) {
+                    calendarCell.setGridPosition(CalendarCell.GridPosition.TOP_RIGHT_CORNER);
+                } else if (i == 5 && j == 0) {
+                    calendarCell.setGridPosition(CalendarCell.GridPosition.BOTTOM_LEFT_CORNER);
+                } else if (i == 5 && j == 6) {
+                    calendarCell.setGridPosition(CalendarCell.GridPosition.BOTTOM_RIGHT_CORNER);
+                } else if (i == 0) {
+                    calendarCell.setGridPosition(CalendarCell.GridPosition.TOP_EDGE);
+                } else if (j == 0) {
+                    calendarCell.setGridPosition(CalendarCell.GridPosition.LEFT_EDGE);
+                } else if (i == 5) {
+                    calendarCell.setGridPosition(CalendarCell.GridPosition.BOTTOM_EDGE);
+                } else if (j == 6) {
+                    calendarCell.setGridPosition(CalendarCell.GridPosition.RIGHT_EDGE);
+                }
+
                 calendarRow.addView(calendarCell);
             }
 
