@@ -1,4 +1,4 @@
-CircleMenu
+CalendarAdapter
 ==========
 
 This library provides a set of views to display a calendar with symbols representing events and an adapter to
@@ -34,8 +34,6 @@ Construct a `CalendarAdapter` with `CalendarAdapter.Builder`:
         .create();
 ```
 
-```java
-
 Then hand off the `CalendarAdapter` to your `ListView` and you're good to go:
 
 ```java
@@ -46,55 +44,55 @@ Then hand off the `CalendarAdapter` to your `ListView` and you're good to go:
 
 There are several additional parameters you can pass to the `CalendarAdapter.Builder`.
 
-# startDate(Date startDate)
+##### startDate(Date startDate)
 
 Any date in the first month to be displayed.
 
-# endDate(Date endDate)
+##### endDate(Date endDate)
 
 Any date in the last month to be displayed.
 
-# titleTypeface(Typeface titleTypeface)
+##### titleTypeface(Typeface titleTypeface)
 
 The typeface for the name of the month (i.e. January, February).
 
-# daysOfWeekTypeface(Typeface daysOfWeekTypeface)
+##### daysOfWeekTypeface(Typeface daysOfWeekTypeface)
 
 The typeface for the days of the week (i.e. Sun, Mon, Tue).
 
-# calendarCellTypeface(Typeface calendarCellTypeface)
+##### calendarCellTypeface(Typeface calendarCellTypeface)
 
 The typeface for the numbers in the calendar cells.
 
-# titleTextColor(int titleTextColor)
+##### titleTextColor(int titleTextColor)
 
 The text color for the name of the month (i.e. January, February).
 
-# daysOfWeekTextColor(int daysOfWeekTextColor)
+##### daysOfWeekTextColor(int daysOfWeekTextColor)
 
 The text color for the days of the week (i.e. Sun, Mon, Tue).
 
-# calendarCellTextColor(int calendarCellTextColor)
+##### calendarCellTextColor(int calendarCellTextColor)
 
 The text color for the numbers in the calendar cells.
 
-# eventColor(int eventColor)
+##### eventColor(int eventColor)
 
 The color of the squares to symbolize events in the calendar cells.
 
-# pastFutureCalendarCellBackgroundColor(int pastFutureCalendarCellBackgroundColor)
+##### pastFutureCalendarCellBackgroundColor(int pastFutureCalendarCellBackgroundColor)
 
 The color for the background of the calendar cells outside of the current displayed month.
 
-# pastFutureCalendarCellTextColor(int pastFutureCalendarCellTextColor)
+##### pastFutureCalendarCellTextColor(int pastFutureCalendarCellTextColor)
 
 The text color for the calendar cells outside of the current displayed month.
 
-# pastFutureEventColor(int pastFutureEventColor)
+##### pastFutureEventColor(int pastFutureEventColor)
 
 The color of the squares to symbolize events in calendar cells outside of the current displayed month.
 
-# onDateSelectedListener(OnDateSelectedListener listener)
+##### onDateSelectedListener(OnDateSelectedListener listener)
 
 A listener that implements the method:
 
@@ -102,7 +100,7 @@ A listener that implements the method:
     public void onDateSelected(Date date)
 ```
 
-# eventDates(List<Date> eventDates)
+##### eventDates(List<Date> eventDates)
 
 A `List` of Java `Date` objects representing an event.  These are shown as colored squares on the calendar.
 
