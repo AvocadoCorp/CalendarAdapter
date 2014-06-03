@@ -20,6 +20,7 @@ public class CalendarCell extends View {
     private Paint mTextPaint;
     private Paint mPlusPaint;
     private Paint mBackgroundPaint;
+    private Paint mBorderPaint;
 
     private ArrayList<Rect> mOddNumEventRects = new ArrayList<Rect>();
     private ArrayList<Rect> mEvenNumEventRects = new ArrayList<Rect>();
@@ -28,6 +29,7 @@ public class CalendarCell extends View {
 
     private int[] mTextOrigin = new int[2];
     private Rect[] mPlusRects = new Rect[2];
+    private Rect mBorderRect = new Rect();
 
     private int mDayOfMonth;
     private String mDateText;
@@ -64,12 +66,15 @@ public class CalendarCell extends View {
         mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setTextSize((int) context.getResources().getDimension(R.dimen.cell_text_size));
         mTextPaint.setTextAlign(Paint.Align.CENTER);
-        mTextPaint.setColor(context.getResources().getColor(R.color.default_text_color));
+        mTextPaint.setColor(getResources().getColor(R.color.default_text_color));
 
         mEventPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mEventPaint.setStyle(Paint.Style.FILL);
 
         mPlusPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        mBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mBorderPaint.setColor(getResources().getColor(R.color.default_cell_border_color));
 
         int height = (int) (context.getResources().getDisplayMetrics().widthPixels / 7.f);
         setMinimumHeight(height);
@@ -106,6 +111,8 @@ public class CalendarCell extends View {
     @Override
     protected void onSizeChanged (int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+
+        mBorderRect = new Rect(0, h, w, 0);
 
         mTextOrigin[0] = (int) (w / 2.f);
         mTextOrigin[1] = (int) (h / 2.f);
@@ -187,6 +194,14 @@ public class CalendarCell extends View {
         super.onDraw(canvas);
 
         canvas.drawPaint(mBackgroundPaint);
+
+        canvas.drawLine(mBorderRect.left, 0, mBorderRect.right, 0, mBorderPaint);
+        canvas.drawLine(mBorderRect.left, mBorderRect.top - 1, mBorderRect.right,
+                mBorderRect.top - 1, mBorderPaint);
+        canvas.drawLine(mBorderRect.left, mBorderRect.bottom, mBorderRect.left, mBorderRect.top,
+                mBorderPaint);
+        canvas.drawLine(mBorderRect.right - 1, mBorderRect.bottom, mBorderRect.right - 1,
+                mBorderRect.top, mBorderPaint);
 
         canvas.drawText(mDateText, mTextOrigin[0], mTextOrigin[1], mTextPaint);
 

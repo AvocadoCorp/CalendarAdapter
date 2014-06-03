@@ -5,4 +5,5 @@
     <color name="past_event_color">#4A4A4A</color>
     <color name="default_text_color">#333333</color>
     <color name="default_event_color">#6a5acd</color>
+    <color name="default_cell_border_color">#efefef</color>
 </resources>
