@@ -6,8 +6,6 @@ manage them in a ListView.
 
 It uses the builder pattern to construct the adapter with several (optional) customizable parameters.
 
-<img src="https://github.com/AvocadoCorp/CalendarAdapter/blob/master/calendar-adapter-screenshot.png" height="540"/>
-
 ## Overview
 
 Add a `ListView` to your XML layout file:
