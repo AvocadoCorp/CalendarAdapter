@@ -4,7 +4,9 @@ CalendarAdapter
 This library provides a set of views to display a calendar with symbols representing events and an adapter to
 manage them in a ListView.
 
-The API uses the builder pattern to construct the adapter with several (optional) customizable parameters.
+It uses the builder pattern to construct the adapter with several (optional) customizable parameters.
+
+<img src="https://github.com/AvocadoCorp/CalendarAdapter/blob/master/calendar-adapter-screenshot.png" height="540"/>
 
 ## Overview
 
