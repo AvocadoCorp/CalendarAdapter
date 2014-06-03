@@ -14,7 +14,7 @@ Add a `ListView` to your XML layout file:
 <ListView
     android:id="@+id/calendar_list_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+    android:layout_height="match_parent" />
 ```
 
 Grab a reference to it:
@@ -28,7 +28,6 @@ Construct a `CalendarAdapter` with `CalendarAdapter.Builder`:
 ```java
 CalendarAdapter adapter = new CalendarAdapter.Builder(this)
         .startDate(new Date())
-        .endDate(lastCalendar.getTime())
         .eventDates(eventDates)
         .onDateSelectedListener(this)
         .create();
