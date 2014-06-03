@@ -43,6 +43,8 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
     private int mPastFutureCalendarCellTextColor;
     private int mPastFutureEventColor;
 
+    private int mCalendarCellBorderColor;
+
     private List<List<Date>> mEventDatesInEachMonth;
 
     private OnDateSelectedListener mListener;
@@ -60,7 +62,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
                             int daysOfWeekTextColor, int calendarCellTextColor, int eventColor,
                             int pastFutureCalendarCellBackgroundColor,
                             int pastFutureCalendarCellTextColor, int pastFutureEventColor,
-                            List<List<Date>> eventDatesInEachMonth,
+                            int calendarCellBorderColor, List<List<Date>> eventDatesInEachMonth,
                             OnDateSelectedListener listener) {
 
         mContext = context;
@@ -76,6 +78,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
         mPastFutureCalendarCellBackgroundColor = pastFutureCalendarCellBackgroundColor;
         mPastFutureCalendarCellTextColor = pastFutureCalendarCellTextColor;
         mPastFutureEventColor = pastFutureEventColor;
+        mCalendarCellBorderColor = calendarCellBorderColor;
         mEventDatesInEachMonth = eventDatesInEachMonth;
         mListener = listener;
     }
@@ -152,6 +155,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
             vh.calendarGrid.setPastFutureCalendarCellBackgroundColor(mPastFutureCalendarCellBackgroundColor);
             vh.calendarGrid.setPastFutureCalendarCellTextColor(mPastFutureCalendarCellTextColor);
             vh.calendarGrid.setPastFutureEventColor(mPastFutureEventColor);
+            vh.calendarGrid.setCalendarCellBorderColor(mCalendarCellBorderColor);
             vh.calendarGrid.setOnDateSelectedListener(mListener);
 
             convertView.setTag(vh);
@@ -220,6 +224,8 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
         private int mPastFutureCalendarCellTextColor = -1;
         private int mPastFutureEventColor = -1;
 
+        private int mCalendarCellBorderColor = -1;
+
         private List<Date> mEventDates;
 
         private OnDateSelectedListener mListener;
@@ -285,6 +291,11 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
 
         public Builder pastFutureEventColor(int pastFutureEventColor) {
             mPastFutureEventColor = pastFutureEventColor;
+            return this;
+        }
+
+        public Builder calendarCellBorderColor(int calendarCellBorderColor) {
+            mCalendarCellBorderColor = calendarCellBorderColor;
             return this;
         }
 
@@ -388,7 +399,8 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
             }
 
             if (mPastFutureCalendarCellBackgroundColor == -1) {
-                mPastFutureCalendarCellBackgroundColor = mContext.getResources().getColor(R.color.gray);
+                mPastFutureCalendarCellBackgroundColor = mContext.getResources()
+                        .getColor(R.color.gray);
             }
 
             if (mPastFutureCalendarCellTextColor == -1) {
@@ -399,11 +411,17 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
                 mPastFutureEventColor = defaultTextColor;
             }
 
+            if (mCalendarCellBorderColor == -1) {
+                mCalendarCellBorderColor = mContext.getResources()
+                        .getColor(R.color.default_cell_border_color);
+            }
+
             return new CalendarAdapter(mContext, months, mDaysOfWeekStrings, mTitleTypeface,
                     mDaysOfWeekTypeface, mCalendarCellTypeface, mTitleTextColor,
                     mDaysOfWeekTextColor, mCalendarCellTextColor, mEventColor,
                     mPastFutureCalendarCellBackgroundColor, mPastFutureCalendarCellTextColor,
-                    mPastFutureEventColor, eventDatesInEachMonth, mListener);
+                    mPastFutureEventColor, mCalendarCellBorderColor, eventDatesInEachMonth,
+                    mListener);
         }
     }
 }

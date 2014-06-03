@@ -30,6 +30,8 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
     private int mPastFutureCalendarCellTextColor;
     private int mPastFutureEventColor;
 
+    private int mCalendarCellBorderColor;
+
     public CalendarAdapter.OnDateSelectedListener mListener;
 
     public CalendarGrid(Context context) {
@@ -140,6 +142,7 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
             calendarCell.setPastFutureCalendarCellBackgroundColor(mPastFutureCalendarCellBackgroundColor);
             calendarCell.setPastFutureCalendarCellTextColor(mPastFutureCalendarCellTextColor);
             calendarCell.setPastFutureEventColor(mPastFutureEventColor);
+            calendarCell.setBorderColor(mCalendarCellBorderColor);
             calendarCell.setRelativeMonth(relativeMonth);
             calendarCell.setOnClickListener(this);
 
@@ -173,6 +176,10 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
     public void setPastFutureEventColor(int pastFutureEventColor) {
         mPastFutureEventColor = pastFutureEventColor;
+    }
+
+    public void setCalendarCellBorderColor(int calendarCellBorderColor) {
+        mCalendarCellBorderColor = calendarCellBorderColor;
     }
 
     @Override

@@ -102,6 +102,10 @@ public class CalendarCell extends View {
         mEventColor = eventColor;
     }
 
+    public void setBorderColor(int borderColor) {
+        mBorderPaint.setColor(borderColor);
+    }
+
     public void setNumEvents(int numEvents) {
         mNumEvents = numEvents;
         mNumRectsToDraw = Math.min(numEvents, MAX_EVENTS);

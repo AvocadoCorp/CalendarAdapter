@@ -47,6 +47,7 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
         int pastFutureCalendarCellBackgroundColor = getResources().getColor(R.color.past_future_background);
         int pastFutureCalendarCellTextColor = getResources().getColor(R.color.past_future_text);
         int pastFutureEventColor = getResources().getColor(R.color.past_future_event);
+        int calendarCellBorderColor = getResources().getColor(R.color.calendar_cell_border);
 
         List<Date> eventDates = new ArrayList<Date>();
         Calendar cal = Calendar.getInstance();
@@ -73,6 +74,7 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
                 .pastFutureCalendarCellBackgroundColor(pastFutureCalendarCellBackgroundColor)
                 .pastFutureCalendarCellTextColor(pastFutureCalendarCellTextColor)
                 .pastFutureEventColor(pastFutureEventColor)
+                .calendarCellBorderColor(calendarCellBorderColor)
                 .eventDates(eventDates)
                 .onDateSelectedListener(this)
                 .create();
