@@ -165,8 +165,23 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
         String prettyMonth = mMonthFormat.format(mMonths[position]);
         vh.titleView.setText(prettyMonth);
 
-        vh.calendarGrid.initCalendar(mMonths[position], mEventDatesInEachMonth.get(position + 1),
-                mEventDatesInEachMonth.get(position), mEventDatesInEachMonth.get(position + 2));
+        List<Date> currentMonthEventDates = null;
+        if (mEventDatesInEachMonth.size() > position + 1) {
+            currentMonthEventDates = mEventDatesInEachMonth.get(position + 1);
+        }
+
+        List<Date> previousMonthEventDates = null;
+        if (mEventDatesInEachMonth.size() > position) {
+            previousMonthEventDates = mEventDatesInEachMonth.get(position);
+        }
+
+        List<Date> nextMonthEventDates = null;
+        if (mEventDatesInEachMonth.size() > position + 2) {
+            nextMonthEventDates = mEventDatesInEachMonth.get(position + 2);
+        }
+
+        vh.calendarGrid.initCalendar(mMonths[position], currentMonthEventDates,
+                previousMonthEventDates, nextMonthEventDates);
 
         return convertView;
     }

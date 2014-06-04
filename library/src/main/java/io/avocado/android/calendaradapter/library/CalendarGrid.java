@@ -96,27 +96,33 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
         int[] eventsPerDay = new int[42];
         int calPos;
 
-        for (Date date : currentMonthEventDates) {
-            cal.setTime(date);
-            calPos = daysToShowInPreviousMonthBeforeThisMonth + cal.get(Calendar.DAY_OF_MONTH) - 1;
-            eventsPerDay[calPos] += 1;
-        }
-
-        for (Date date : previousMonthEventDates) {
-            cal.setTime(date);
-            calPos = daysToShowInPreviousMonthBeforeThisMonth -
-                    (daysInPreviousMonth - cal.get(Calendar.DAY_OF_MONTH)) - 1;
-            if (calPos >= 0) {
+        if (currentMonthEventDates != null) {
+            for (Date date : currentMonthEventDates) {
+                cal.setTime(date);
+                calPos = daysToShowInPreviousMonthBeforeThisMonth + cal.get(Calendar.DAY_OF_MONTH) - 1;
                 eventsPerDay[calPos] += 1;
             }
         }
 
-        for (Date date : nextMonthEventDates) {
-            cal.setTime(date);
-            calPos = daysToShowInPreviousMonthBeforeThisMonth + daysInCurrentMonth
-                    + cal.get(Calendar.DAY_OF_MONTH) - 1;
-            if (calPos < 42) {
-                eventsPerDay[calPos] += 1;
+        if (previousMonthEventDates != null) {
+            for (Date date : previousMonthEventDates) {
+                cal.setTime(date);
+                calPos = daysToShowInPreviousMonthBeforeThisMonth -
+                        (daysInPreviousMonth - cal.get(Calendar.DAY_OF_MONTH)) - 1;
+                if (calPos >= 0) {
+                    eventsPerDay[calPos] += 1;
+                }
+            }
+        }
+
+        if (nextMonthEventDates != null) {
+            for (Date date : nextMonthEventDates) {
+                cal.setTime(date);
+                calPos = daysToShowInPreviousMonthBeforeThisMonth + daysInCurrentMonth
+                        + cal.get(Calendar.DAY_OF_MONTH) - 1;
+                if (calPos < 42) {
+                    eventsPerDay[calPos] += 1;
+                }
             }
         }
 
