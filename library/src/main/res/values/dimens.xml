@@ -3,4 +3,5 @@
     <dimen name="title_text_size">44sp</dimen>
     <dimen name="day_of_week_text_size">16sp</dimen>
     <dimen name="cell_text_size">16sp</dimen>
+    <dimen name="plus_stroke_thickness">1.5dp</dimen>
 </resources>

@@ -37,6 +37,7 @@ public class CalendarCell extends View {
     private int mNumRectsToDraw; // Including plus sign
 
     private static final int MAX_EVENTS = 3;
+    private final int PLUS_STROKE_THICKNESS;
 
     public enum RelativeMonth {
         PREVIOUS, CURRENT, NEXT
@@ -78,7 +79,9 @@ public class CalendarCell extends View {
 
         mBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-        int height = (int) (context.getResources().getDisplayMetrics().widthPixels / 7.f);
+        PLUS_STROKE_THICKNESS = (int) getResources().getDimension(R.dimen.plus_stroke_thickness);
+
+        int height = (int) (getResources().getDisplayMetrics().widthPixels / 7.f);
         setMinimumHeight(height);
     }
 
@@ -176,18 +179,16 @@ public class CalendarCell extends View {
         Rect boundingPlusRect = MAX_EVENTS % 2 == 0 ? mEvenNumEventRects.get(MAX_EVENTS - 1)
                 : mOddNumEventRects.get(MAX_EVENTS - 1);
 
-        int strokeThickness = 4;
-
         int midX = boundingPlusRect.left + (int) (boundingPlusRect.width() / 2.f);
         int midY = boundingPlusRect.bottom - (int) (boundingPlusRect.height() / 2.f);
 
         // horizontal stroke
-        mPlusRects[0] = new Rect(boundingPlusRect.left, midY - strokeThickness / 2,
-                boundingPlusRect.right, midY + strokeThickness / 2);
+        mPlusRects[0] = new Rect(boundingPlusRect.left, midY - PLUS_STROKE_THICKNESS / 2,
+                boundingPlusRect.right, midY + PLUS_STROKE_THICKNESS / 2);
 
         //vertical stroke
-        mPlusRects[1] = new Rect(midX - strokeThickness / 2, boundingPlusRect.top,
-                midX + strokeThickness / 2, boundingPlusRect.bottom);
+        mPlusRects[1] = new Rect(midX - PLUS_STROKE_THICKNESS / 2, boundingPlusRect.top,
+                midX + PLUS_STROKE_THICKNESS / 2, boundingPlusRect.bottom);
     }
 
     @Override
