@@ -172,15 +172,36 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
     }
 
     public void addEventDate(Date eventDate) {
-        List<Date> oneDateList = new ArrayList<Date>();
-        oneDateList.add(eventDate);
-
-        addEventDates(oneDateList);
-    }
-
-    public void addEventDates(List<Date> eventDates) {
         if (mEventDatesInEachMonth == null) {
             mEventDatesInEachMonth = new ArrayList<List<Date>>();
+        }
+
+        Calendar monthCal = Calendar.getInstance();
+        monthCal.setTime(mMonths[0]);
+        monthCal.add(Calendar.MONTH, -1);
+
+        Calendar eventCal = Calendar.getInstance();
+        eventCal.setTime(eventDate);
+
+        for (int i = 0; i <= mMonths.length + 1; i++) {
+            if (mEventDatesInEachMonth.get(i) == null) {
+                mEventDatesInEachMonth.add(new ArrayList<Date>());
+            }
+
+            if (monthCal.get(Calendar.YEAR) == eventCal.get(Calendar.YEAR) &&
+                    monthCal.get(Calendar.MONTH) == eventCal.get(Calendar.MONTH)) {
+                mEventDatesInEachMonth.get(i).add(eventDate);
+            }
+
+            monthCal.add(Calendar.MONTH, 1);
+        }
+    }
+
+    public void setEventDates(List<Date> eventDates) {
+        if (mEventDatesInEachMonth == null) {
+            mEventDatesInEachMonth = new ArrayList<List<Date>>();
+        } else {
+            mEventDatesInEachMonth.clear();
         }
 
         Calendar monthCal = Calendar.getInstance();
@@ -200,14 +221,6 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
             mEventDatesInEachMonth.add(eventDatesInMonth);
             monthCal.add(Calendar.MONTH, 1);
         }
-    }
-
-    public void setEventDates(List<Date> eventDates) {
-        if (mEventDatesInEachMonth != null) {
-            mEventDatesInEachMonth.clear();
-        }
-
-        addEventDates(eventDates);
     }
 
     @Override
