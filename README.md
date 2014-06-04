@@ -39,6 +39,16 @@ Then hand off the `CalendarAdapter` to your `ListView` and you're good to go:
 calendarListView.setAdapter(adapter);
 ```
 
+`CalendarAdapter` also contains the following public methods for manipulating its data after initialization:
+
+##### addEventDate(Date date)
+
+Add an event represented by its date.
+
+##### setEventDates(List\<Date\> eventDates)
+
+Set all the events to be displayed.  All previous data will be cleared.  You may use this to set events after `CalendarAdapter`  initialization, but if all the events are known prior to initialization you should pass the eventDates in the corresponding `CalendarAdapter.Builder` method.
+
 ## Customization
 
 There are several additional parameters you can pass to the `CalendarAdapter.Builder`.
@@ -103,7 +113,7 @@ A listener that implements the method:
 public void onDateSelected(Date date)
 ```
 
-##### eventDates(List<Date> eventDates)
+##### eventDates(List\<Date\> eventDates)
 
 A `List` of Java `Date` objects representing an event.  These are shown as colored squares on the calendar.
 
