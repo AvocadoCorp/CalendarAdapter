@@ -343,22 +343,24 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
             }
 
             List<List<Date>> eventDatesInEachMonth = new ArrayList<List<Date>>();
-            Calendar monthCal = Calendar.getInstance();
-            monthCal.setTime(months[0]);
-            monthCal.add(Calendar.MONTH, -1);
+            if (mEventDates != null) {
+                Calendar monthCal = Calendar.getInstance();
+                monthCal.setTime(months[0]);
+                monthCal.add(Calendar.MONTH, -1);
 
-            Calendar eventCal = Calendar.getInstance();
-            for (int i = 0; i <= months.length + 1; i++) {
-                List<Date> eventDatesInMonth = new ArrayList<Date>();
-                for (Date eventDate : mEventDates) {
-                    eventCal.setTime(eventDate);
-                    if (monthCal.get(Calendar.YEAR) == eventCal.get(Calendar.YEAR) &&
-                            monthCal.get(Calendar.MONTH) == eventCal.get(Calendar.MONTH)) {
-                        eventDatesInMonth.add(eventDate);
+                Calendar eventCal = Calendar.getInstance();
+                for (int i = 0; i <= months.length + 1; i++) {
+                    List<Date> eventDatesInMonth = new ArrayList<Date>();
+                    for (Date eventDate : mEventDates) {
+                        eventCal.setTime(eventDate);
+                        if (monthCal.get(Calendar.YEAR) == eventCal.get(Calendar.YEAR) &&
+                                monthCal.get(Calendar.MONTH) == eventCal.get(Calendar.MONTH)) {
+                            eventDatesInMonth.add(eventDate);
+                        }
                     }
+                    eventDatesInEachMonth.add(eventDatesInMonth);
+                    monthCal.add(Calendar.MONTH, 1);
                 }
-                eventDatesInEachMonth.add(eventDatesInMonth);
-                monthCal.add(Calendar.MONTH, 1);
             }
 
             mDaysOfWeekStrings = new String[7];
