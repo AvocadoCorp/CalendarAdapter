@@ -90,7 +90,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return mEventDatesInEachMonth != null ? mEventDatesInEachMonth.get(position) : null;
     }
 
     @Override
