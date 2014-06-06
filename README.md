@@ -49,6 +49,8 @@ Add an event represented by its date.
 
 Set all the events to be displayed.  All previous data will be cleared.  You may use this to set events after `CalendarAdapter`  initialization, but if all the events are known prior to initialization you should pass the eventDates in the corresponding `CalendarAdapter.Builder` method.
 
+As with any Android `Adapter`, be sure to call `notifyDataSetChanged()` after changing its data.
+
 ## Customization
 
 There are several additional parameters you can pass to the `CalendarAdapter.Builder`.
