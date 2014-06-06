@@ -23,34 +23,34 @@ import java.util.Locale;
  */
 public class CalendarAdapter extends BaseAdapter implements ListAdapter {
 
-    private Context mContext;
+    private Context context;
 
-    private Date[] mMonths;
+    private Date[] months;
 
-    private String[] mDaysOfWeekStrings;
+    private String[] daysOfWeekStrings;
 
-    private Typeface mTitleTypeface;
-    private Typeface mDaysOfWeekTypeface;
-    private Typeface mCalendarCellTypeface;
+    private Typeface titleTypeface;
+    private Typeface daysOfWeekTypeface;
+    private Typeface calendarCellTypeface;
 
-    private int mTitleTextColor;
-    private int mDaysOfWeekTextColor;
-    private int mCalendarCellTextColor;
+    private int titleTextColor;
+    private int daysOfWeekTextColor;
+    private int calendarCellTextColor;
 
-    private int mEventColor;
+    private int eventColor;
 
-    private int mPastFutureCalendarCellBackgroundColor;
-    private int mPastFutureCalendarCellTextColor;
-    private int mPastFutureEventColor;
+    private int pastFutureCalendarCellBackgroundColor;
+    private int pastFutureCalendarCellTextColor;
+    private int pastFutureEventColor;
 
-    private int mCalendarCellBorderColor;
+    private int calendarCellBorderColor;
 
-    private List<List<Date>> mEventDatesInEachMonth;
+    private List<List<Date>> eventDatesInEachMonth;
 
-    private OnDateSelectedListener mListener;
+    private OnDateSelectedListener listener;
 
-    private static SimpleDateFormat mMonthFormat = new SimpleDateFormat("MMMM", Locale.getDefault());
-    private static SimpleDateFormat mDayOfWeekFormat = new SimpleDateFormat("EEE", Locale.getDefault());
+    private static SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", Locale.getDefault());
+    private static SimpleDateFormat dayOfWeekFormat = new SimpleDateFormat("EEE", Locale.getDefault());
 
     public interface OnDateSelectedListener {
         public void onDateSelected(Date date);
@@ -65,32 +65,32 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
                             int calendarCellBorderColor, List<List<Date>> eventDatesInEachMonth,
                             OnDateSelectedListener listener) {
 
-        mContext = context;
-        mMonths = months;
-        mDaysOfWeekStrings = daysOfWeekStrings;
-        mTitleTypeface = titleTypeface;
-        mDaysOfWeekTypeface = daysOfWeekTypeface;
-        mCalendarCellTypeface = calendarCellTypeface;
-        mTitleTextColor = titleTextColor;
-        mDaysOfWeekTextColor = daysOfWeekTextColor;
-        mCalendarCellTextColor = calendarCellTextColor;
-        mEventColor = eventColor;
-        mPastFutureCalendarCellBackgroundColor = pastFutureCalendarCellBackgroundColor;
-        mPastFutureCalendarCellTextColor = pastFutureCalendarCellTextColor;
-        mPastFutureEventColor = pastFutureEventColor;
-        mCalendarCellBorderColor = calendarCellBorderColor;
-        mEventDatesInEachMonth = eventDatesInEachMonth;
-        mListener = listener;
+        this.context = context;
+        this.months = months;
+        this.daysOfWeekStrings = daysOfWeekStrings;
+        this.titleTypeface = titleTypeface;
+        this.daysOfWeekTypeface = daysOfWeekTypeface;
+        this.calendarCellTypeface = calendarCellTypeface;
+        this.titleTextColor = titleTextColor;
+        this.daysOfWeekTextColor = daysOfWeekTextColor;
+        this.calendarCellTextColor = calendarCellTextColor;
+        this.eventColor = eventColor;
+        this.pastFutureCalendarCellBackgroundColor = pastFutureCalendarCellBackgroundColor;
+        this.pastFutureCalendarCellTextColor = pastFutureCalendarCellTextColor;
+        this.pastFutureEventColor = pastFutureEventColor;
+        this.calendarCellBorderColor = calendarCellBorderColor;
+        this.eventDatesInEachMonth = eventDatesInEachMonth;
+        this.listener = listener;
     }
 
     @Override
     public int getCount() {
-        return mMonths.length;
+        return months.length;
     }
 
     @Override
     public Object getItem(int position) {
-        return mEventDatesInEachMonth != null ? mEventDatesInEachMonth.get(position) : null;
+        return eventDatesInEachMonth != null ? eventDatesInEachMonth.get(position) : null;
     }
 
     @Override
@@ -107,7 +107,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            LayoutInflater li = (LayoutInflater) mContext.getSystemService(
+            LayoutInflater li = (LayoutInflater) context.getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
             convertView = li.inflate(R.layout.calendar_page, parent, false);
             if (convertView == null) {
@@ -117,31 +117,31 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
             ViewHolder vh = new ViewHolder();
 
             vh.titleView = (TextView) convertView.findViewById(R.id.month_title);
-            vh.titleView.setTypeface(mTitleTypeface);
-            vh.titleView.setTextColor(mTitleTextColor);
+            vh.titleView.setTypeface(titleTypeface);
+            vh.titleView.setTextColor(titleTextColor);
             vh.titleView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                    (int) mContext.getResources().getDimension(R.dimen.title_text_size));
+                    (int) context.getResources().getDimension(R.dimen.title_text_size));
 
             vh.daysOfWeekView = (LinearLayout) convertView.findViewById(R.id.days_of_week);
 
             for (int i = 0; i < vh.daysOfWeekView.getChildCount(); i++) {
                 TextView dayLabel = (TextView) vh.daysOfWeekView.getChildAt(i);
                 if (dayLabel != null) {
-                    dayLabel.setText(mDaysOfWeekStrings[i]);
+                    dayLabel.setText(daysOfWeekStrings[i]);
                 }
             }
 
-            int dayOfWeekTextSize = (int) mContext.getResources().getDimension(R.dimen.day_of_week_text_size);
+            int dayOfWeekTextSize = (int) context.getResources().getDimension(R.dimen.day_of_week_text_size);
 
             for (int i = 0; i < vh.daysOfWeekView.getChildCount(); i++) {
                 TextView dayLabel = (TextView) vh.daysOfWeekView.getChildAt(i);
                 if (dayLabel != null) {
-                    if (mDaysOfWeekTypeface != null) {
-                        dayLabel.setTypeface(mDaysOfWeekTypeface);
+                    if (daysOfWeekTypeface != null) {
+                        dayLabel.setTypeface(daysOfWeekTypeface);
                     }
 
-                    if (mDaysOfWeekTextColor != -1) {
-                        dayLabel.setTextColor(mDaysOfWeekTextColor);
+                    if (daysOfWeekTextColor != -1) {
+                        dayLabel.setTextColor(daysOfWeekTextColor);
                     }
 
                     dayLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, dayOfWeekTextSize);
@@ -149,63 +149,63 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
             }
 
             vh.calendarGrid = (CalendarGrid) convertView.findViewById(R.id.month_grid);
-            vh.calendarGrid.setTypeface(mCalendarCellTypeface);
-            vh.calendarGrid.setTextColor(mCalendarCellTextColor);
-            vh.calendarGrid.setEventColor(mEventColor);
-            vh.calendarGrid.setPastFutureCalendarCellBackgroundColor(mPastFutureCalendarCellBackgroundColor);
-            vh.calendarGrid.setPastFutureCalendarCellTextColor(mPastFutureCalendarCellTextColor);
-            vh.calendarGrid.setPastFutureEventColor(mPastFutureEventColor);
-            vh.calendarGrid.setCalendarCellBorderColor(mCalendarCellBorderColor);
-            vh.calendarGrid.setOnDateSelectedListener(mListener);
+            vh.calendarGrid.setTypeface(calendarCellTypeface);
+            vh.calendarGrid.setTextColor(calendarCellTextColor);
+            vh.calendarGrid.setEventColor(eventColor);
+            vh.calendarGrid.setPastFutureCalendarCellBackgroundColor(pastFutureCalendarCellBackgroundColor);
+            vh.calendarGrid.setPastFutureCalendarCellTextColor(pastFutureCalendarCellTextColor);
+            vh.calendarGrid.setPastFutureEventColor(pastFutureEventColor);
+            vh.calendarGrid.setCalendarCellBorderColor(calendarCellBorderColor);
+            vh.calendarGrid.setOnDateSelectedListener(listener);
 
             convertView.setTag(vh);
         }
         ViewHolder vh = (ViewHolder) convertView.getTag();
 
-        String prettyMonth = mMonthFormat.format(mMonths[position]);
+        String prettyMonth = monthFormat.format(months[position]);
         vh.titleView.setText(prettyMonth);
 
         List<Date> currentMonthEventDates = null;
-        if (mEventDatesInEachMonth.size() > position + 1) {
-            currentMonthEventDates = mEventDatesInEachMonth.get(position + 1);
+        if (eventDatesInEachMonth.size() > position + 1) {
+            currentMonthEventDates = eventDatesInEachMonth.get(position + 1);
         }
 
         List<Date> previousMonthEventDates = null;
-        if (mEventDatesInEachMonth.size() > position) {
-            previousMonthEventDates = mEventDatesInEachMonth.get(position);
+        if (eventDatesInEachMonth.size() > position) {
+            previousMonthEventDates = eventDatesInEachMonth.get(position);
         }
 
         List<Date> nextMonthEventDates = null;
-        if (mEventDatesInEachMonth.size() > position + 2) {
-            nextMonthEventDates = mEventDatesInEachMonth.get(position + 2);
+        if (eventDatesInEachMonth.size() > position + 2) {
+            nextMonthEventDates = eventDatesInEachMonth.get(position + 2);
         }
 
-        vh.calendarGrid.initCalendar(mMonths[position], currentMonthEventDates,
+        vh.calendarGrid.initCalendar(months[position], currentMonthEventDates,
                 previousMonthEventDates, nextMonthEventDates);
 
         return convertView;
     }
 
     public void addEventDate(Date eventDate) {
-        if (mEventDatesInEachMonth == null) {
-            mEventDatesInEachMonth = new ArrayList<List<Date>>();
+        if (eventDatesInEachMonth == null) {
+            eventDatesInEachMonth = new ArrayList<List<Date>>();
         }
 
         Calendar monthCal = Calendar.getInstance();
-        monthCal.setTime(mMonths[0]);
+        monthCal.setTime(months[0]);
         monthCal.add(Calendar.MONTH, -1);
 
         Calendar eventCal = Calendar.getInstance();
         eventCal.setTime(eventDate);
 
-        for (int i = 0; i <= mMonths.length + 1; i++) {
-            if (mEventDatesInEachMonth.get(i) == null) {
-                mEventDatesInEachMonth.add(new ArrayList<Date>());
+        for (int i = 0; i <= months.length + 1; i++) {
+            if (eventDatesInEachMonth.get(i) == null) {
+                eventDatesInEachMonth.add(new ArrayList<Date>());
             }
 
             if (monthCal.get(Calendar.YEAR) == eventCal.get(Calendar.YEAR) &&
                     monthCal.get(Calendar.MONTH) == eventCal.get(Calendar.MONTH)) {
-                mEventDatesInEachMonth.get(i).add(eventDate);
+                eventDatesInEachMonth.get(i).add(eventDate);
             }
 
             monthCal.add(Calendar.MONTH, 1);
@@ -213,18 +213,18 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
     }
 
     public void setEventDates(List<Date> eventDates) {
-        if (mEventDatesInEachMonth == null) {
-            mEventDatesInEachMonth = new ArrayList<List<Date>>();
+        if (eventDatesInEachMonth == null) {
+            eventDatesInEachMonth = new ArrayList<List<Date>>();
         } else {
-            mEventDatesInEachMonth.clear();
+            eventDatesInEachMonth.clear();
         }
 
         Calendar monthCal = Calendar.getInstance();
-        monthCal.setTime(mMonths[0]);
+        monthCal.setTime(months[0]);
         monthCal.add(Calendar.MONTH, -1);
 
         Calendar eventCal = Calendar.getInstance();
-        for (int i = 0; i <= mMonths.length + 1; i++) {
+        for (int i = 0; i <= months.length + 1; i++) {
             List<Date> eventDatesInMonth = new ArrayList<Date>();
             for (Date eventDate : eventDates) {
                 eventCal.setTime(eventDate);
@@ -233,7 +233,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
                     eventDatesInMonth.add(eventDate);
                 }
             }
-            mEventDatesInEachMonth.add(eventDatesInMonth);
+            eventDatesInEachMonth.add(eventDatesInMonth);
             monthCal.add(Calendar.MONTH, 1);
         }
     }
@@ -408,7 +408,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
             mDaysOfWeekStrings = new String[7];
             cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
             for (int i = 0; i < 7; i++) {
-                mDaysOfWeekStrings[i] = mDayOfWeekFormat.format(cal.getTime());
+                mDaysOfWeekStrings[i] = dayOfWeekFormat.format(cal.getTime());
                 cal.add(Calendar.DAY_OF_WEEK, 1);
             }
 

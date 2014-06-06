@@ -17,22 +17,20 @@ import java.util.List;
 
 public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
-    private Context mContext;
+    private Typeface typeface;
+    private int textColor;
 
-    private Typeface mTypeface;
-    private int mTextColor;
+    private int eventColor;
 
-    private int mEventColor;
+    private Date someDateInMonth;
 
-    private Date mSomeDateInMonth;
+    private int pastFutureCalendarCellBackgroundColor;
+    private int pastFutureCalendarCellTextColor;
+    private int pastFutureEventColor;
 
-    private int mPastFutureCalendarCellBackgroundColor;
-    private int mPastFutureCalendarCellTextColor;
-    private int mPastFutureEventColor;
+    private int calendarCellBorderColor;
 
-    private int mCalendarCellBorderColor;
-
-    public CalendarAdapter.OnDateSelectedListener mListener;
+    public CalendarAdapter.OnDateSelectedListener listener;
 
     public CalendarGrid(Context context) {
         this(context, null);
@@ -41,16 +39,14 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
     public CalendarGrid(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        mContext = context;
-
         setOrientation(VERTICAL);
 
         for (int i = 0; i < 6; i++) {
-            LinearLayout calendarRow = new LinearLayout(mContext);
+            LinearLayout calendarRow = new LinearLayout(context);
             calendarRow.setOrientation(HORIZONTAL);
 
             for (int j = 0; j < 7; j++) {
-                CalendarCell calendarCell = new CalendarCell(mContext);
+                CalendarCell calendarCell = new CalendarCell(context);
 
                 LayoutParams cellLp = new LayoutParams(0,
                         ViewGroup.LayoutParams.MATCH_PARENT);
@@ -86,7 +82,7 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
     public void initCalendar(Date someDateInMonth, List<Date> currentMonthEventDates,
                              List<Date> previousMonthEventDates, List<Date> nextMonthEventDates) {
-        mSomeDateInMonth = someDateInMonth;
+        this.someDateInMonth = someDateInMonth;
         int daysInCurrentMonth = CalendarUtils.getNumberOfDaysInMonth(someDateInMonth);
         int daysInPreviousMonth = CalendarUtils.getNumberOfDaysInPreviousMonth(someDateInMonth);
         int daysToShowInPreviousMonthBeforeThisMonth
@@ -138,8 +134,8 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
                 continue;
             }
 
-            if (mTypeface != null) {
-                calendarCell.setTypeface(mTypeface);
+            if (typeface != null) {
+                calendarCell.setTypeface(typeface);
             }
 
             int dayNum;
@@ -163,12 +159,12 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
             }
 
             calendarCell.setDayOfMonth(dayNum);
-            calendarCell.setTextColor(mTextColor);
-            calendarCell.setEventColor(mEventColor);
-            calendarCell.setPastFutureCalendarCellBackgroundColor(mPastFutureCalendarCellBackgroundColor);
-            calendarCell.setPastFutureCalendarCellTextColor(mPastFutureCalendarCellTextColor);
-            calendarCell.setPastFutureEventColor(mPastFutureEventColor);
-            calendarCell.setBorderColor(mCalendarCellBorderColor);
+            calendarCell.setTextColor(textColor);
+            calendarCell.setEventColor(eventColor);
+            calendarCell.setPastFutureCalendarCellBackgroundColor(pastFutureCalendarCellBackgroundColor);
+            calendarCell.setPastFutureCalendarCellTextColor(pastFutureCalendarCellTextColor);
+            calendarCell.setPastFutureEventColor(pastFutureEventColor);
+            calendarCell.setBorderColor(calendarCellBorderColor);
             calendarCell.setRelativeMonth(relativeMonth);
             calendarCell.setOnClickListener(this);
 
@@ -177,35 +173,35 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
     }
 
     public void setTypeface(Typeface typeface) {
-        mTypeface = typeface;
+        this.typeface = typeface;
     }
 
     public void setTextColor(int textColor) {
-        mTextColor = textColor;
+        this.textColor = textColor;
     }
 
     public void setEventColor(int eventColor) {
-        mEventColor = eventColor;
+        this.eventColor = eventColor;
     }
 
     public void setOnDateSelectedListener(CalendarAdapter.OnDateSelectedListener listener) {
-        mListener = listener;
+        this.listener = listener;
     }
 
     public void setPastFutureCalendarCellBackgroundColor(int pastFutureCalendarCellBackgroundColor) {
-        mPastFutureCalendarCellBackgroundColor = pastFutureCalendarCellBackgroundColor;
+        this.pastFutureCalendarCellBackgroundColor = pastFutureCalendarCellBackgroundColor;
     }
 
     public void setPastFutureCalendarCellTextColor(int pastFutureCalendarCellTextColor) {
-        mPastFutureCalendarCellTextColor = pastFutureCalendarCellTextColor;
+        this.pastFutureCalendarCellTextColor = pastFutureCalendarCellTextColor;
     }
 
     public void setPastFutureEventColor(int pastFutureEventColor) {
-        mPastFutureEventColor = pastFutureEventColor;
+        this.pastFutureEventColor = pastFutureEventColor;
     }
 
     public void setCalendarCellBorderColor(int calendarCellBorderColor) {
-        mCalendarCellBorderColor = calendarCellBorderColor;
+        this.calendarCellBorderColor = calendarCellBorderColor;
     }
 
     @Override
@@ -213,7 +209,7 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
         CalendarCell cell = (CalendarCell) v;
 
         Calendar cal = Calendar.getInstance();
-        cal.setTime(mSomeDateInMonth);
+        cal.setTime(someDateInMonth);
         cal.set(Calendar.DAY_OF_MONTH, cell.getDayOfMonth());
 
         if (cell.getRelativeMonth() == CalendarCell.RelativeMonth.PREVIOUS) {
@@ -222,6 +218,6 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
             cal.add(Calendar.MONTH, 1);
         }
 
-        mListener.onDateSelected(cal.getTime());
+        listener.onDateSelected(cal.getTime());
     }
 }
