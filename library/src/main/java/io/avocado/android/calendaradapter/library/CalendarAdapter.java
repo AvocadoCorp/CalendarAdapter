@@ -245,128 +245,128 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
 
     public static class Builder {
 
-        private Context mContext;
+        private Context context;
 
-        private Date mStartDate;
-        private Date mEndDate;
+        private Date startDate;
+        private Date endDate;
 
-        private String[] mDaysOfWeekStrings;
+        private String[] daysOfWeekStrings;
 
-        private Typeface mTitleTypeface;
-        private Typeface mDaysOfWeekTypeface;
-        private Typeface mCalendarCellTypeface;
+        private Typeface titleTypeface;
+        private Typeface daysOfWeekTypeface;
+        private Typeface calendarCellTypeface;
 
-        private int mTitleTextColor = -1;
-        private int mDaysOfWeekTextColor = -1;
-        private int mCalendarCellTextColor = -1;
+        private int titleTextColor = -1;
+        private int daysOfWeekTextColor = -1;
+        private int calendarCellTextColor = -1;
 
-        private int mEventColor = -1;
+        private int eventColor = -1;
 
-        private int mPastFutureCalendarCellBackgroundColor = -1;
-        private int mPastFutureCalendarCellTextColor = -1;
-        private int mPastFutureEventColor = -1;
+        private int pastFutureCalendarCellBackgroundColor = -1;
+        private int pastFutureCalendarCellTextColor = -1;
+        private int pastFutureEventColor = -1;
 
-        private int mCalendarCellBorderColor = -1;
+        private int calendarCellBorderColor = -1;
 
-        private List<Date> mEventDates;
+        private List<Date> eventDates;
 
-        private OnDateSelectedListener mListener;
+        private OnDateSelectedListener listener;
 
         public Builder(Context context) {
-            mContext = context;
+            this.context = context;
         }
 
         public Builder startDate(Date someDateInStartMonth) {
-            mStartDate = someDateInStartMonth;
+            this.startDate = someDateInStartMonth;
             return this;
         }
 
         public Builder endDate(Date someDateInEndMonth) {
-            mEndDate = someDateInEndMonth;
+            this.endDate = someDateInEndMonth;
             return this;
         }
 
         public Builder titleTypeface(Typeface titleTypeface) {
-            mTitleTypeface = titleTypeface;
+            this.titleTypeface = titleTypeface;
             return this;
         }
 
         public Builder daysOfWeekTypeface(Typeface daysOfWeekTypeface) {
-            mDaysOfWeekTypeface = daysOfWeekTypeface;
+            this.daysOfWeekTypeface = daysOfWeekTypeface;
             return this;
         }
 
         public Builder calendarCellTypeface(Typeface calendarCellTypeface) {
-            mCalendarCellTypeface = calendarCellTypeface;
+            this.calendarCellTypeface = calendarCellTypeface;
             return this;
         }
 
         public Builder titleTextColor(int titleTextColor) {
-            mTitleTextColor = titleTextColor;
+            this.titleTextColor = titleTextColor;
             return this;
         }
 
         public Builder daysOfWeekTextColor(int daysOfWeekTextColor) {
-            mDaysOfWeekTextColor = daysOfWeekTextColor;
+            this.daysOfWeekTextColor = daysOfWeekTextColor;
             return this;
         }
 
         public Builder calendarCellTextColor(int calendarCellTextColor) {
-            mCalendarCellTextColor = calendarCellTextColor;
+            this.calendarCellTextColor = calendarCellTextColor;
             return this;
         }
 
         public Builder eventColor(int eventColor) {
-            mEventColor = eventColor;
+            this.eventColor = eventColor;
             return this;
         }
 
         public Builder pastFutureCalendarCellBackgroundColor(int pastFutureCalendarCellBackgroundColor) {
-            mPastFutureCalendarCellBackgroundColor = pastFutureCalendarCellBackgroundColor;
+            this.pastFutureCalendarCellBackgroundColor = pastFutureCalendarCellBackgroundColor;
             return this;
         }
 
         public Builder pastFutureCalendarCellTextColor(int pastFutureCalendarCellTextColor) {
-            mPastFutureCalendarCellTextColor = pastFutureCalendarCellTextColor;
+            this.pastFutureCalendarCellTextColor = pastFutureCalendarCellTextColor;
             return this;
         }
 
         public Builder pastFutureEventColor(int pastFutureEventColor) {
-            mPastFutureEventColor = pastFutureEventColor;
+            this.pastFutureEventColor = pastFutureEventColor;
             return this;
         }
 
         public Builder calendarCellBorderColor(int calendarCellBorderColor) {
-            mCalendarCellBorderColor = calendarCellBorderColor;
+            this.calendarCellBorderColor = calendarCellBorderColor;
             return this;
         }
 
         public Builder onDateSelectedListener(OnDateSelectedListener listener) {
-            mListener = listener;
+            this.listener = listener;
             return this;
         }
 
         public Builder eventDates(List<Date> eventDates) {
-            mEventDates = eventDates;
+            this.eventDates = eventDates;
             return this;
         }
 
         public CalendarAdapter create() {
 
-            if (mContext == null) {
+            if (context == null) {
                 throw new IllegalStateException("Context cannot be null");
             }
 
             Date startDate;
-            if (mStartDate != null) {
-                startDate = mStartDate;
+            if (this.startDate != null) {
+                startDate = this.startDate;
             } else {
                 startDate = new Date();
             }
 
             Date endDate;
-            if (mEndDate != null) {
-                endDate = mEndDate;
+            if (this.endDate != null) {
+                endDate = this.endDate;
             } else {
                 Calendar dateCal = Calendar.getInstance();
                 dateCal.setTime(startDate);
@@ -376,7 +376,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
 
             int totalMonths = CalendarUtils.getNumberOfMonthsApartInclusive(startDate, endDate);
             Calendar cal = Calendar.getInstance();
-            cal.setTime(mStartDate);
+            cal.setTime(startDate);
             cal.set(Calendar.DAY_OF_MONTH, 1);
             Date[] months = new Date[totalMonths];
             for (int i = 0; i < totalMonths; i++) {
@@ -385,7 +385,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
             }
 
             List<List<Date>> eventDatesInEachMonth = new ArrayList<List<Date>>();
-            if (mEventDates != null) {
+            if (eventDates != null) {
                 Calendar monthCal = Calendar.getInstance();
                 monthCal.setTime(months[0]);
                 monthCal.add(Calendar.MONTH, -1);
@@ -393,7 +393,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
                 Calendar eventCal = Calendar.getInstance();
                 for (int i = 0; i <= months.length + 1; i++) {
                     List<Date> eventDatesInMonth = new ArrayList<Date>();
-                    for (Date eventDate : mEventDates) {
+                    for (Date eventDate : eventDates) {
                         eventCal.setTime(eventDate);
                         if (monthCal.get(Calendar.YEAR) == eventCal.get(Calendar.YEAR) &&
                                 monthCal.get(Calendar.MONTH) == eventCal.get(Calendar.MONTH)) {
@@ -405,67 +405,67 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
                 }
             }
 
-            mDaysOfWeekStrings = new String[7];
+            daysOfWeekStrings = new String[7];
             cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
             for (int i = 0; i < 7; i++) {
-                mDaysOfWeekStrings[i] = dayOfWeekFormat.format(cal.getTime());
+                daysOfWeekStrings[i] = dayOfWeekFormat.format(cal.getTime());
                 cal.add(Calendar.DAY_OF_WEEK, 1);
             }
 
-            if (mTitleTypeface == null) {
-                mTitleTypeface = Typeface.DEFAULT;
+            if (titleTypeface == null) {
+                titleTypeface = Typeface.DEFAULT;
             }
 
-            if (mDaysOfWeekTypeface == null) {
-                mDaysOfWeekTypeface = Typeface.DEFAULT;
+            if (daysOfWeekTypeface == null) {
+                daysOfWeekTypeface = Typeface.DEFAULT;
             }
 
-            if (mCalendarCellTypeface == null) {
-                mCalendarCellTypeface = Typeface.DEFAULT;
+            if (calendarCellTypeface == null) {
+                calendarCellTypeface = Typeface.DEFAULT;
             }
 
-            int defaultTextColor = mContext.getResources().getColor(R.color.default_text_color);
+            int defaultTextColor = context.getResources().getColor(R.color.default_text_color);
 
-            if (mTitleTextColor == -1) {
-                mTitleTextColor = defaultTextColor;
+            if (titleTextColor == -1) {
+                titleTextColor = defaultTextColor;
             }
 
-            if (mDaysOfWeekTextColor == -1) {
-                mDaysOfWeekTextColor = defaultTextColor;
+            if (daysOfWeekTextColor == -1) {
+                daysOfWeekTextColor = defaultTextColor;
             }
 
-            if (mCalendarCellTextColor == -1) {
-                mCalendarCellTextColor = defaultTextColor;
+            if (calendarCellTextColor == -1) {
+                calendarCellTextColor = defaultTextColor;
             }
 
-            if (mEventColor == -1) {
-                mEventColor = mContext.getResources().getColor(R.color.default_event_color);
+            if (eventColor == -1) {
+                eventColor = context.getResources().getColor(R.color.default_event_color);
             }
 
-            if (mPastFutureCalendarCellBackgroundColor == -1) {
-                mPastFutureCalendarCellBackgroundColor = mContext.getResources()
+            if (pastFutureCalendarCellBackgroundColor == -1) {
+                pastFutureCalendarCellBackgroundColor = context.getResources()
                         .getColor(R.color.gray);
             }
 
-            if (mPastFutureCalendarCellTextColor == -1) {
-                mPastFutureCalendarCellTextColor = defaultTextColor;
+            if (pastFutureCalendarCellTextColor == -1) {
+                pastFutureCalendarCellTextColor = defaultTextColor;
             }
 
-            if (mPastFutureEventColor == -1) {
-                mPastFutureEventColor = defaultTextColor;
+            if (pastFutureEventColor == -1) {
+                pastFutureEventColor = defaultTextColor;
             }
 
-            if (mCalendarCellBorderColor == -1) {
-                mCalendarCellBorderColor = mContext.getResources()
+            if (calendarCellBorderColor == -1) {
+                calendarCellBorderColor = context.getResources()
                         .getColor(R.color.default_cell_border_color);
             }
 
-            return new CalendarAdapter(mContext, months, mDaysOfWeekStrings, mTitleTypeface,
-                    mDaysOfWeekTypeface, mCalendarCellTypeface, mTitleTextColor,
-                    mDaysOfWeekTextColor, mCalendarCellTextColor, mEventColor,
-                    mPastFutureCalendarCellBackgroundColor, mPastFutureCalendarCellTextColor,
-                    mPastFutureEventColor, mCalendarCellBorderColor, eventDatesInEachMonth,
-                    mListener);
+            return new CalendarAdapter(context, months, daysOfWeekStrings, titleTypeface,
+                    daysOfWeekTypeface, calendarCellTypeface, titleTextColor,
+                    daysOfWeekTextColor, calendarCellTextColor, eventColor,
+                    pastFutureCalendarCellBackgroundColor, pastFutureCalendarCellTextColor,
+                    pastFutureEventColor, calendarCellBorderColor, eventDatesInEachMonth,
+                    listener);
         }
     }
 }
