@@ -75,7 +75,6 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
                 .pastFutureCalendarCellTextColor(pastFutureCalendarCellTextColor)
                 .pastFutureEventColor(pastFutureEventColor)
                 .calendarCellBorderColor(calendarCellBorderColor)
-//                .eventDates(eventDates)
                 .onDateSelectedListener(this)
                 .create();
 
