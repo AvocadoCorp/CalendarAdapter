@@ -452,7 +452,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
             }
 
             if (pastFutureEventColor == -1) {
-                pastFutureEventColor = defaultTextColor;
+                pastFutureEventColor = context.getResources().getColor(R.color.default_event_color);
             }
 
             if (calendarCellBorderColor == -1) {
