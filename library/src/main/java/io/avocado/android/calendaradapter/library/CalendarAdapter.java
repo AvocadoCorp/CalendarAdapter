@@ -444,7 +444,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
 
             if (pastFutureCalendarCellBackgroundColor == -1) {
                 pastFutureCalendarCellBackgroundColor = context.getResources()
-                        .getColor(R.color.gray);
+                        .getColor(R.color.past_future_cell_background_color);
             }
 
             if (pastFutureCalendarCellTextColor == -1) {
@@ -456,8 +456,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
             }
 
             if (calendarCellBorderColor == -1) {
-                calendarCellBorderColor = context.getResources()
-                        .getColor(R.color.default_cell_border_color);
+                calendarCellBorderColor = context.getResources().getColor(R.color.default_event_color);
             }
 
             return new CalendarAdapter(context, months, daysOfWeekStrings, titleTypeface,
