@@ -39,15 +39,17 @@ Then hand off the `CalendarAdapter` to your `ListView` and you're good to go:
 calendarListView.setAdapter(adapter);
 ```
 
+`CalendarAdapter` uses a class called `CalendarEvent` for representing events.  `CalendarEvent` has two public `Date` instance variables, `startDate` and `endDate`, both of which are passed in in the constructor.
+
 `CalendarAdapter` also contains the following public methods for manipulating its data after initialization:
 
-##### addEventDate(Date date)
+##### addCalendarEvent(CalendarEvent calendarEvent)
 
-Add an event represented by its date.
+Add an event.
 
-##### setEventDates(List\<Date\> eventDates)
+##### setEventDates(List\<CalendarEvent\> calendarEvents)
 
-Set all the events to be displayed.  All previous data will be cleared.  You may use this to set events after `CalendarAdapter`  initialization, but if all the events are known prior to initialization you should pass the eventDates in the corresponding `CalendarAdapter.Builder` method.
+Set all the events to be displayed.  All previous data will be cleared.  You may use this to set events after `CalendarAdapter`  initialization, but if all the events are known prior to initialization you should pass the `calendarEvents` in the corresponding `CalendarAdapter.Builder` method.
 
 As with any Android `Adapter`, be sure to call `notifyDataSetChanged()` after changing its data.
 
@@ -115,9 +117,9 @@ A listener that implements the method:
 public void onDateSelected(Date date)
 ```
 
-##### eventDates(List\<Date\> eventDates)
+##### calendarEvents(List\<CalendarEvent\> calendarEvents)
 
-A `List` of Java `Date` objects representing an event.  These are shown as colored squares on the calendar.
+A `List` of `CalendarEvent` objects representing events.  These are shown as colored squares on the calendar.
 
 
 ## License
