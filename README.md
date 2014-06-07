@@ -47,7 +47,7 @@ calendarListView.setAdapter(adapter);
 
 Add an event.
 
-##### setEventDates(List\<CalendarEvent\> calendarEvents)
+##### setCalendarEvents(List\<CalendarEvent\> calendarEvents)
 
 Set all the events to be displayed.  All previous data will be cleared.  You may use this to set events after `CalendarAdapter`  initialization, but if all the events are known prior to initialization you should pass the `calendarEvents` in the corresponding `CalendarAdapter.Builder` method.
 
