@@ -15,6 +15,9 @@ import java.util.ArrayList;
  */
 public class CalendarCell extends View {
 
+    private static final int MAX_EVENTS = 3;
+    private final int PLUS_STROKE_THICKNESS;
+
     private Paint eventPaint;
     private Paint textPaint;
     private Paint plusPaint;
@@ -27,26 +30,16 @@ public class CalendarCell extends View {
     private ArrayList<Rect> eventRectsToDraw;
 
     private int[] textOrigin = new int[2];
+
     private Rect[] plusRects = new Rect[2];
-    private Rect borderRect = new Rect();
+
+    private Rect borderRect;
 
     private int dayOfMonth;
     private String dateText;
 
     private int numEvents;
     private int numRectsToDraw; // Including plus sign
-
-    private static final int MAX_EVENTS = 3;
-    private final int PLUS_STROKE_THICKNESS;
-
-    public enum RelativeMonth {
-        PREVIOUS, CURRENT, NEXT
-    }
-
-    public enum GridPosition {
-        LEFT_EDGE, TOP_LEFT_CORNER, TOP_EDGE, TOP_RIGHT_CORNER, RIGHT_EDGE, BOTTOM_RIGHT_CORNER,
-        BOTTOM_EDGE, BOTTOM_LEFT_CORNER, INSIDE
-    }
 
     private boolean shouldDrawLeftBorder;
     private boolean shouldDrawTopBorder;
@@ -58,6 +51,28 @@ public class CalendarCell extends View {
 
     private int pastFutureCalendarCellTextColor;
     private int pastFutureEventColor;
+
+    private MultiDayPosition multiDayPosition;
+
+    private int[] multiDayStartCircle = new int[3]; // x, y, radius
+    private int[] multiDayEndCircle = new int[3];
+
+    private Rect multiDayStartStripeRect;
+    private Rect multiDayMidStripeRect;
+    private Rect multiDayEndStripeRect;
+
+    public enum RelativeMonth {
+        PREVIOUS, CURRENT, NEXT
+    }
+
+    public enum GridPosition {
+        LEFT_EDGE, TOP_LEFT_CORNER, TOP_EDGE, TOP_RIGHT_CORNER, RIGHT_EDGE, BOTTOM_RIGHT_CORNER,
+        BOTTOM_EDGE, BOTTOM_LEFT_CORNER, INSIDE
+    }
+
+    public enum MultiDayPosition {
+        NONE, START, MID, END
+    }
 
     public CalendarCell(Context context) {
         this(context, null);
@@ -79,7 +94,8 @@ public class CalendarCell extends View {
 
         borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-        PLUS_STROKE_THICKNESS = (int) getResources().getDimension(R.dimen.plus_stroke_thickness);
+        PLUS_STROKE_THICKNESS = Math.max(
+                (int) getResources().getDimension(R.dimen.plus_stroke_thickness), 1);
 
         int height = (int) (getResources().getDisplayMetrics().widthPixels / 7.f);
         setMinimumHeight(height);
@@ -121,7 +137,7 @@ public class CalendarCell extends View {
         textOrigin[0] = (int) (w / 2.f);
         textOrigin[1] = (int) (h / 2.f);
 
-        int size = (int) (.125f * w);
+        int size = (int) (.125f * h);
         int offsetFromBottom = (int) (.1875f * h);
         int y = h - offsetFromBottom - size;
         int space = (int) (1.5f * size); // square width + one space
@@ -189,6 +205,50 @@ public class CalendarCell extends View {
         //vertical stroke
         plusRects[1] = new Rect(midX - PLUS_STROKE_THICKNESS / 2, boundingPlusRect.top,
                 midX + PLUS_STROKE_THICKNESS / 2, boundingPlusRect.bottom);
+
+        // Multi day circles
+
+        Rect rectToMoveLeftForStart = MAX_EVENTS % 2 == 0 ? evenNumEventRects.get(MAX_EVENTS - 2)
+                : oddNumEventRects.get(MAX_EVENTS - 2);
+        Rect boundingStartCircleRect = new Rect();
+        boundingStartCircleRect.left = rectToMoveLeftForStart.left - space;
+        boundingStartCircleRect.top = rectToMoveLeftForStart.top;
+        boundingStartCircleRect.right = rectToMoveLeftForStart.right - space;
+        boundingStartCircleRect.bottom = rectToMoveLeftForStart.bottom;
+
+        Rect rectToMoveRightForEnd = MAX_EVENTS % 2 == 0 ? evenNumEventRects.get(MAX_EVENTS - 1)
+                : oddNumEventRects.get(MAX_EVENTS - 1);
+        Rect boundingEndCircleRect = new Rect();
+        boundingEndCircleRect.left = rectToMoveRightForEnd.left + space;
+        boundingEndCircleRect.top = rectToMoveRightForEnd.top;
+        boundingEndCircleRect.right = rectToMoveRightForEnd.right + space;
+        boundingEndCircleRect.bottom = rectToMoveRightForEnd.bottom;
+
+        int radius = (int) (size / 2.f);
+
+        multiDayStartCircle[0] = boundingStartCircleRect.left + radius;
+        multiDayStartCircle[1] = midY;
+        multiDayStartCircle[2] = radius;
+
+        multiDayEndCircle[0] = boundingEndCircleRect.left + radius;
+        multiDayEndCircle[1] = midY;
+        multiDayEndCircle[2] = radius;
+
+        // Multi day stripes
+
+        int stripeTop;
+        int stripeBottom;
+        if (plusRects[0].bottom - plusRects[0].top > 2) {
+            stripeTop = plusRects[0].top + 1;
+            stripeBottom = plusRects[0].bottom - 1;
+        } else {
+            stripeTop = plusRects[0].top;
+            stripeBottom = plusRects[0].bottom;
+        }
+
+        multiDayStartStripeRect = new Rect(multiDayStartCircle[0], stripeTop, w, stripeBottom);
+        multiDayMidStripeRect = new Rect(0, stripeTop, w, stripeBottom);
+        multiDayEndStripeRect = new Rect(0, stripeTop, multiDayEndCircle[0], stripeBottom);
     }
 
     @Override
@@ -228,6 +288,20 @@ public class CalendarCell extends View {
                 canvas.drawRect(eventRectsToDraw.get(i), eventPaint);
             }
         }
+
+        if (multiDayPosition == MultiDayPosition.START) {
+            canvas.drawCircle(multiDayStartCircle[0], multiDayStartCircle[1],
+                    multiDayStartCircle[2], eventPaint);
+            canvas.drawRect(multiDayStartStripeRect, eventPaint);
+
+        } else if (multiDayPosition == MultiDayPosition.END) {
+            canvas.drawCircle(multiDayEndCircle[0], multiDayEndCircle[1],
+                    multiDayEndCircle[2], eventPaint);
+            canvas.drawRect(multiDayEndStripeRect, eventPaint);
+
+        } else if (multiDayPosition == MultiDayPosition.MID) {
+            canvas.drawRect(multiDayMidStripeRect, eventPaint);
+        }
     }
 
     public void setPastFutureCalendarCellBackgroundColor(int pastFutureCalendarCellBackgroundColor) {
@@ -264,6 +338,10 @@ public class CalendarCell extends View {
         shouldDrawTopBorder = gridPosition == GridPosition.TOP_LEFT_CORNER ||
                 gridPosition == GridPosition.TOP_EDGE ||
                 gridPosition == GridPosition.TOP_RIGHT_CORNER;
+    }
+
+    public void setMultiDayPosition(MultiDayPosition multiDayPosition) {
+        this.multiDayPosition = multiDayPosition;
     }
 
     public RelativeMonth getRelativeMonth() {

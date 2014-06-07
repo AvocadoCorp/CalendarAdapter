@@ -11,11 +11,12 @@ import java.util.Date;
 import java.util.List;
 
 import io.avocado.android.calendaradapter.library.CalendarAdapter;
+import io.avocado.android.calendaradapter.library.CalendarEvent;
 
 
 public class MainActivity extends ActionBarActivity implements CalendarAdapter.OnDateSelectedListener {
 
-    private CalendarAdapter mAdapter;
+    private CalendarAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,19 +50,29 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
         int pastFutureEventColor = getResources().getColor(R.color.past_future_event);
         int calendarCellBorderColor = getResources().getColor(R.color.calendar_cell_border);
 
-        List<Date> eventDates = new ArrayList<Date>();
+        List<CalendarEvent> calendarEvents = new ArrayList<CalendarEvent>();
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
         cal.add(Calendar.MONTH, -1);
         while (cal.getTime().before(endDate)) {
+            // Add a 4 day event
+            if (cal.get(Calendar.DAY_OF_MONTH) == 30) {
+                Calendar endCal = Calendar.getInstance();
+                endCal.setTime(cal.getTime());
+                endCal.add(Calendar.DAY_OF_MONTH, 7);
+                Date eventEndTime = endCal.getTime();
+                calendarEvents.add(new CalendarEvent(cal.getTime(), eventEndTime));
+            }
+
+            // Add a bunch of 1 day events
             if (cal.get(Calendar.DAY_OF_MONTH) % 5 == 0) {
-                eventDates.add(cal.getTime());
+                calendarEvents.add(new CalendarEvent(cal.getTime(), null));
             }
 
             cal.add(Calendar.DAY_OF_MONTH, 1);
         }
 
-        mAdapter = new CalendarAdapter.Builder(this)
+        adapter = new CalendarAdapter.Builder(this)
                 .titleTypeface(titleTypeface)
                 .titleTextColor(mainTextColor)
                 .daysOfWeekTypeface(daysOfWeekTypeface)
@@ -78,15 +89,15 @@ public class MainActivity extends ActionBarActivity implements CalendarAdapter.O
                 .onDateSelectedListener(this)
                 .create();
 
-        calendarListView.setAdapter(mAdapter);
+        calendarListView.setAdapter(adapter);
 
-        mAdapter.setEventDates(eventDates);
-        mAdapter.notifyDataSetChanged();
+        adapter.setCalendarEvents(calendarEvents);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onDateSelected(Date date) {
-        mAdapter.addEventDate(date);
-        mAdapter.notifyDataSetChanged();
+        adapter.addCalendarEvent(new CalendarEvent(date, null));
+        adapter.notifyDataSetChanged();
     }
 }

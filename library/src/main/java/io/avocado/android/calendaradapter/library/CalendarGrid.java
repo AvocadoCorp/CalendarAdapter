@@ -14,7 +14,6 @@ import java.util.List;
 /**
  * Created by matthewlogan on 5/22/14.
  */
-
 public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
     private Typeface typeface;
@@ -80,44 +79,105 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
         }
     }
 
-    public void initCalendar(Date someDateInMonth, List<Date> currentMonthEventDates,
-                             List<Date> previousMonthEventDates, List<Date> nextMonthEventDates) {
+    public void initCalendar(Date someDateInMonth, List<CalendarEvent> currentMonthCalendarEvents,
+                             List<CalendarEvent> previousMonthCalendarEvents,
+                             List<CalendarEvent> nextMonthCalendarEvents) {
+
         this.someDateInMonth = someDateInMonth;
+
         int daysInCurrentMonth = CalendarUtils.getNumberOfDaysInMonth(someDateInMonth);
         int daysInPreviousMonth = CalendarUtils.getNumberOfDaysInPreviousMonth(someDateInMonth);
         int daysToShowInPreviousMonthBeforeThisMonth
                 = CalendarUtils.getNumberOfDaysToShowInPreviousMonthBeforeThisMonth(someDateInMonth);
 
         Calendar cal = Calendar.getInstance();
+
         int[] eventsPerDay = new int[42];
-        int calPos;
 
-        if (currentMonthEventDates != null) {
-            for (Date date : currentMonthEventDates) {
-                cal.setTime(date);
-                calPos = daysToShowInPreviousMonthBeforeThisMonth + cal.get(Calendar.DAY_OF_MONTH) - 1;
-                eventsPerDay[calPos] += 1;
-            }
-        }
+        boolean[] multiDayStarts = new boolean[42];
+        boolean[] multiDayMids = new boolean[42];
+        boolean[] multiDayEnds = new boolean[42];
 
-        if (previousMonthEventDates != null) {
-            for (Date date : previousMonthEventDates) {
-                cal.setTime(date);
-                calPos = daysToShowInPreviousMonthBeforeThisMonth -
-                        (daysInPreviousMonth - cal.get(Calendar.DAY_OF_MONTH)) - 1;
-                if (calPos >= 0) {
-                    eventsPerDay[calPos] += 1;
+        int startCalPos;
+        int daysFromStartToEndDate;
+
+        if (currentMonthCalendarEvents != null) {
+            for (CalendarEvent calendarEvent : currentMonthCalendarEvents) {
+                cal.setTime(calendarEvent.startDate);
+                startCalPos = daysToShowInPreviousMonthBeforeThisMonth +
+                        cal.get(Calendar.DAY_OF_MONTH) - 1;
+                daysFromStartToEndDate = CalendarUtils.getNumberOfDaysInApartExclusive(
+                        calendarEvent.startDate, calendarEvent.endDate);
+
+                if (calendarEvent.endDate == null || daysFromStartToEndDate == 0) {
+                    eventsPerDay[startCalPos] += 1;
+                } else {
+                    int endCalPos = Math.min(startCalPos + daysFromStartToEndDate, 41);
+                    for (int i = startCalPos; i <= endCalPos; i++) {
+                        if (i == startCalPos) {
+                            multiDayStarts[i] = true;
+                        } else if (i == endCalPos) {
+                            multiDayEnds[i] = true;
+                        } else {
+                            multiDayMids[i] = true;
+                        }
+                    }
                 }
             }
         }
 
-        if (nextMonthEventDates != null) {
-            for (Date date : nextMonthEventDates) {
-                cal.setTime(date);
-                calPos = daysToShowInPreviousMonthBeforeThisMonth + daysInCurrentMonth
+        if (previousMonthCalendarEvents != null) {
+            for (CalendarEvent calendarEvent : previousMonthCalendarEvents) {
+                cal.setTime(calendarEvent.startDate);
+                startCalPos = daysToShowInPreviousMonthBeforeThisMonth -
+                        (daysInPreviousMonth - cal.get(Calendar.DAY_OF_MONTH)) - 1;
+                daysFromStartToEndDate = CalendarUtils.getNumberOfDaysInApartExclusive(
+                        calendarEvent.startDate, calendarEvent.endDate);
+
+                if (calendarEvent.endDate == null || daysFromStartToEndDate == 0) {
+                    if (startCalPos >= 0) {
+                        eventsPerDay[startCalPos] += 1;
+                    }
+                } else {
+                    int endCalPos = Math.min(startCalPos + daysFromStartToEndDate, 41);
+                    for (int i = startCalPos; i <= endCalPos; i++) {
+                        if (i >= 0) {
+                            if (i == startCalPos) {
+                                multiDayStarts[i] = true;
+                            } else if (i == endCalPos) {
+                                multiDayEnds[i] = true;
+                            } else {
+                                multiDayMids[i] = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (nextMonthCalendarEvents != null) {
+            for (CalendarEvent calendarEvent : nextMonthCalendarEvents) {
+                cal.setTime(calendarEvent.startDate);
+                startCalPos = daysToShowInPreviousMonthBeforeThisMonth + daysInCurrentMonth
                         + cal.get(Calendar.DAY_OF_MONTH) - 1;
-                if (calPos < 42) {
-                    eventsPerDay[calPos] += 1;
+                daysFromStartToEndDate = CalendarUtils.getNumberOfDaysInApartExclusive(
+                        calendarEvent.startDate, calendarEvent.endDate);
+
+                if (calendarEvent.endDate == null || daysFromStartToEndDate == 0) {
+                    if (startCalPos < 42) {
+                        eventsPerDay[startCalPos] += 1;
+                    }
+                } else {
+                    int endCalPos = Math.min(startCalPos + daysFromStartToEndDate, 41);
+                    for (int i = startCalPos; i <= endCalPos; i++) {
+                        if (i == startCalPos) {
+                            multiDayStarts[i] = true;
+                        } else if (i == endCalPos) {
+                            multiDayEnds[i] = true;
+                        } else {
+                            multiDayMids[i] = true;
+                        }
+                    }
                 }
             }
         }
@@ -169,6 +229,19 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
             calendarCell.setOnClickListener(this);
 
             calendarCell.setNumEvents(eventsPerDay[calPosition]);
+
+            CalendarCell.MultiDayPosition mdp;
+            if (multiDayStarts[calPosition] && !multiDayMids[calPosition] && !multiDayEnds[calPosition]) {
+                mdp = CalendarCell.MultiDayPosition.START;
+            } else if (!multiDayStarts[calPosition] && !multiDayMids[calPosition] && multiDayEnds[calPosition]) {
+                mdp = CalendarCell.MultiDayPosition.END;
+            } else if (!multiDayStarts[calPosition] && !multiDayMids[calPosition] && !multiDayEnds[calPosition]) {
+                mdp = CalendarCell.MultiDayPosition.NONE;
+            } else {
+                mdp = CalendarCell.MultiDayPosition.MID;
+            }
+
+            calendarCell.setMultiDayPosition(mdp);
         }
     }
 
