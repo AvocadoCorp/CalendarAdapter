@@ -23,6 +23,7 @@ public class CalendarCell extends View {
     private Paint plusPaint;
     private Paint pastFutureBackgroundPaint;
     private Paint borderPaint;
+    private Paint todayPaint;
 
     private ArrayList<Rect> oddNumEventRects = new ArrayList<Rect>();
     private ArrayList<Rect> evenNumEventRects = new ArrayList<Rect>();
@@ -32,8 +33,6 @@ public class CalendarCell extends View {
     private int[] textOrigin = new int[2];
 
     private Rect[] plusRects = new Rect[2];
-
-    private Rect borderRect;
 
     private int dayOfMonth;
     private String dateText;
@@ -61,6 +60,11 @@ public class CalendarCell extends View {
     private Rect multiDayMidStripeRect;
     private Rect multiDayEndStripeRect;
 
+    private boolean today;
+
+    private int width;
+    private int height;
+
     public enum RelativeMonth {
         PREVIOUS, CURRENT, NEXT
     }
@@ -81,21 +85,25 @@ public class CalendarCell extends View {
     public CalendarCell(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        pastFutureBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-        textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        textPaint.setTextSize((int) context.getResources().getDimension(R.dimen.cell_text_size));
-        textPaint.setTextAlign(Paint.Align.CENTER);
-
-        eventPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        eventPaint.setStyle(Paint.Style.FILL);
-
-        plusPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-        borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
         PLUS_STROKE_THICKNESS = Math.max(
                 (int) getResources().getDimension(R.dimen.plus_stroke_thickness), 1);
+
+        pastFutureBackgroundPaint = new Paint();
+
+        textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        textPaint.setTextSize((int) getResources().getDimension(R.dimen.cell_text_size));
+        textPaint.setTextAlign(Paint.Align.CENTER);
+
+        eventPaint = new Paint();
+        eventPaint.setStyle(Paint.Style.FILL);
+
+        plusPaint = new Paint();
+
+        borderPaint = new Paint();
+
+        todayPaint = new Paint();
+        todayPaint.setStyle(Paint.Style.FILL);
+        todayPaint.setColor(0xffcee3a8);
 
         int height = (int) (getResources().getDisplayMetrics().widthPixels / 7.f);
         setMinimumHeight(height);
@@ -132,7 +140,8 @@ public class CalendarCell extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        borderRect = new Rect(0, h, w, 0);
+        width = w;
+        height = h;
 
         textOrigin[0] = (int) (w / 2.f);
         textOrigin[1] = (int) (h / 2.f);
@@ -255,31 +264,36 @@ public class CalendarCell extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        // Background color for today
+        if (today && relativeMonth == RelativeMonth.CURRENT) {
+            canvas.drawRect(0, 0, width, height, todayPaint);
+        }
+
+        // Background color for past / future months
         if (relativeMonth != RelativeMonth.CURRENT) {
             canvas.drawPaint(pastFutureBackgroundPaint);
         }
 
         if (shouldDrawLeftBorder) {
-            // Left stroke
-            canvas.drawLine(borderRect.left, borderRect.bottom, borderRect.left, borderRect.top,
-                    borderPaint);
+            // Left border stroke
+            canvas.drawLine(0, 0, 0, height - 1, borderPaint);
         }
 
         if (shouldDrawTopBorder) {
-            // Top stroke
-            canvas.drawLine(borderRect.left, 0, borderRect.right, 0, borderPaint);
+            // Top border stroke
+            canvas.drawLine(0, 0, width - 1, 0, borderPaint);
         }
 
-        // Bottom stroke
-        canvas.drawLine(borderRect.left, borderRect.top, borderRect.right,
-                borderRect.top, borderPaint);
+        // Right border stroke
+        canvas.drawLine(width - 1, 0, width - 1, height - 1, borderPaint);
 
-        // Right stroke
-        canvas.drawLine(borderRect.right, borderRect.bottom, borderRect.right,
-                borderRect.top, borderPaint);
+        // Bottom border stroke
+        canvas.drawLine(0, height - 1, width, height - 1, borderPaint);
 
+        // Day of month text
         canvas.drawText(dateText, textOrigin[0], textOrigin[1], textPaint);
 
+        // Event rect squares and plus sign
         for (int i = 0; i < numRectsToDraw; i++) {
             if (i == numRectsToDraw - 1 && numEvents > MAX_EVENTS) {
                 canvas.drawRect(plusRects[0], plusPaint);
@@ -289,6 +303,7 @@ public class CalendarCell extends View {
             }
         }
 
+        // Multi day circles and lines
         if (multiDayPosition == MultiDayPosition.START) {
             canvas.drawCircle(multiDayStartCircle[0], multiDayStartCircle[1],
                     multiDayStartCircle[2], eventPaint);
@@ -350,5 +365,13 @@ public class CalendarCell extends View {
 
     public int getDayOfMonth() {
         return dayOfMonth;
+    }
+
+    public void setToday(boolean today) {
+        this.today = today;
+    }
+
+    public void setTodayBackgroundColor(int todayCalendarCellBackgroundColor) {
+        todayPaint.setColor(todayCalendarCellBackgroundColor);
     }
 }

@@ -49,6 +49,7 @@ public class MainActivity extends Activity implements CalendarAdapter.OnDateSele
         int pastFutureCalendarCellTextColor = getResources().getColor(R.color.past_future_text);
         int pastFutureEventColor = getResources().getColor(R.color.past_future_event);
         int calendarCellBorderColor = getResources().getColor(R.color.calendar_cell_border);
+        int todayBackgroundColor = getResources().getColor(R.color.today_background);
 
         List<CalendarEvent> calendarEvents = new ArrayList<CalendarEvent>();
         Calendar cal = Calendar.getInstance();
@@ -86,6 +87,7 @@ public class MainActivity extends Activity implements CalendarAdapter.OnDateSele
                 .pastFutureCalendarCellTextColor(pastFutureCalendarCellTextColor)
                 .pastFutureEventColor(pastFutureEventColor)
                 .calendarCellBorderColor(calendarCellBorderColor)
+                .todayCalendarCellBackgroundColor(todayBackgroundColor)
                 .onDateSelectedListener(this)
                 .create();
 

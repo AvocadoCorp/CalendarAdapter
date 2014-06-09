@@ -6,4 +6,5 @@
     <color name="past_future_background">#ececec</color>
     <color name="past_future_text">#333333</color>
     <color name="past_future_event">#85b826</color>
+    <color name="today_background">#cee3a8</color>
 </resources>

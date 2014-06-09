@@ -29,6 +29,8 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
     private int calendarCellBorderColor;
 
+    private int todayCalendarCellBackgroundColor;
+
     public CalendarAdapter.OnDateSelectedListener listener;
 
     public CalendarGrid(Context context) {
@@ -182,6 +184,10 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
             }
         }
 
+        Calendar todayCal = Calendar.getInstance();
+        int todayNum = todayCal.get(Calendar.DAY_OF_MONTH);
+        boolean todayInCurrentMonth = CalendarUtils.isSameMonth(someDateInMonth, new Date());
+
         for (int calPosition = 0; calPosition < 42; calPosition++) {
 
             int rowNum = calPosition / 7;
@@ -200,6 +206,7 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
             int dayNum;
             CalendarCell.RelativeMonth relativeMonth;
+            boolean today = false;
 
             if (calPosition < daysToShowInPreviousMonthBeforeThisMonth) {
 
@@ -211,6 +218,10 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
                 dayNum = calPosition + 1 - daysToShowInPreviousMonthBeforeThisMonth;
                 relativeMonth = CalendarCell.RelativeMonth.CURRENT;
+
+                if (todayInCurrentMonth && dayNum == todayNum) {
+                    today = true;
+                }
 
             } else {
 
@@ -225,7 +236,9 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
             calendarCell.setPastFutureCalendarCellTextColor(pastFutureCalendarCellTextColor);
             calendarCell.setPastFutureEventColor(pastFutureEventColor);
             calendarCell.setBorderColor(calendarCellBorderColor);
+            calendarCell.setTodayBackgroundColor(todayCalendarCellBackgroundColor);
             calendarCell.setRelativeMonth(relativeMonth);
+            calendarCell.setToday(today);
             calendarCell.setOnClickListener(this);
 
             calendarCell.setNumEvents(eventsPerDay[calPosition]);
@@ -275,6 +288,10 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
     public void setCalendarCellBorderColor(int calendarCellBorderColor) {
         this.calendarCellBorderColor = calendarCellBorderColor;
+    }
+
+    public void setTodayCalendarCellBackgroundColor(int todayCalendarCellBackgroundColor) {
+        this.todayCalendarCellBackgroundColor = todayCalendarCellBackgroundColor;
     }
 
     @Override

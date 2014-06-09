@@ -7,6 +7,7 @@
     <color name="default_cell_border_color">#efefef</color>
     <color name="default_event_color">#85b826</color>
     <color name="default_text_color">#333333</color>
+    <color name="default_today_background_color">#cee3a8</color>
     <color name="past_future_cell_background_color">#ececec</color>
     <color name="white">#ffffff</color>
     <!-- From: file:/Users/matthewlogan/dev/CalendarAdapter/library/src/main/res/values/dimens.xml -->
@@ -17,6 +18,7 @@
     <dimen name="multi_day_stripe_thickness">.75dp</dimen>
     <dimen name="plus_stroke_thickness">1.5dp</dimen>
     <dimen name="title_text_size">44sp</dimen>
+    <dimen name="today_border_thickness">1.5dp</dimen>
     <!-- From: file:/Users/matthewlogan/dev/CalendarAdapter/library/src/main/res/values/strings.xml -->
     <eat-comment />
 

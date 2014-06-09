@@ -45,6 +45,8 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
 
     private int calendarCellBorderColor;
 
+    private int todayCalendarCellBackgroundColor;
+
     private List<List<CalendarEvent>> calendarEventsInEachMonth;
 
     private OnDateSelectedListener listener;
@@ -62,7 +64,8 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
                             int daysOfWeekTextColor, int calendarCellTextColor, int eventColor,
                             int pastFutureCalendarCellBackgroundColor,
                             int pastFutureCalendarCellTextColor, int pastFutureEventColor,
-                            int calendarCellBorderColor, List<List<CalendarEvent>> calendarEventsInEachMonth,
+                            int calendarCellBorderColor, int todayCalendarCellBackgroundColor,
+                            List<List<CalendarEvent>> calendarEventsInEachMonth,
                             OnDateSelectedListener listener) {
 
         this.context = context;
@@ -79,6 +82,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
         this.pastFutureCalendarCellTextColor = pastFutureCalendarCellTextColor;
         this.pastFutureEventColor = pastFutureEventColor;
         this.calendarCellBorderColor = calendarCellBorderColor;
+        this.todayCalendarCellBackgroundColor = todayCalendarCellBackgroundColor;
         this.calendarEventsInEachMonth = calendarEventsInEachMonth;
         this.listener = listener;
     }
@@ -156,6 +160,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
             vh.calendarGrid.setPastFutureCalendarCellTextColor(pastFutureCalendarCellTextColor);
             vh.calendarGrid.setPastFutureEventColor(pastFutureEventColor);
             vh.calendarGrid.setCalendarCellBorderColor(calendarCellBorderColor);
+            vh.calendarGrid.setTodayCalendarCellBackgroundColor(todayCalendarCellBackgroundColor);
             vh.calendarGrid.setOnDateSelectedListener(listener);
 
             convertView.setTag(vh);
@@ -268,6 +273,8 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
 
         private int calendarCellBorderColor = -1;
 
+        private int todayCalendarCellBackgroundColor = -1;
+
         private List<CalendarEvent> calendarEvents;
 
         private OnDateSelectedListener listener;
@@ -338,6 +345,11 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
 
         public Builder calendarCellBorderColor(int calendarCellBorderColor) {
             this.calendarCellBorderColor = calendarCellBorderColor;
+            return this;
+        }
+
+        public Builder todayCalendarCellBackgroundColor(int todayCalendarCellBackgroundColor) {
+            this.todayCalendarCellBackgroundColor = todayCalendarCellBackgroundColor;
             return this;
         }
 
@@ -459,11 +471,17 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
                 calendarCellBorderColor = context.getResources().getColor(R.color.default_cell_border_color);
             }
 
+            if (todayCalendarCellBackgroundColor == -1) {
+                todayCalendarCellBackgroundColor = context.getResources()
+                        .getColor(R.color.default_today_background_color);
+            }
+
             return new CalendarAdapter(context, months, daysOfWeekStrings, titleTypeface,
                     daysOfWeekTypeface, calendarCellTypeface, titleTextColor,
                     daysOfWeekTextColor, calendarCellTextColor, eventColor,
                     pastFutureCalendarCellBackgroundColor, pastFutureCalendarCellTextColor,
-                    pastFutureEventColor, calendarCellBorderColor, calendarEventsInEachMonth,
+                    pastFutureEventColor, calendarCellBorderColor, todayCalendarCellBackgroundColor,
+                    calendarEventsInEachMonth,
                     listener);
         }
     }
