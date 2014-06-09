@@ -109,6 +109,10 @@ The color of the squares to symbolize events in calendar cells outside of the cu
 
 The border color for the 1-pixel wide calendar cell borders.
 
+##### todayCalendarCellBackgroundColor(int todayCalendarCellBackgroundColor)
+
+The color for the background of the calendar cell representing today's date.
+
 ##### onDateSelectedListener(OnDateSelectedListener listener)
 
 A listener that implements the method:
