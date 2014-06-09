@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="/Users/matthewlogan/dev/CalendarAdapter/app/build/intermediates/pre-dexed/debug/classes-f9a3652c96f31e228cfcdf33af694ddb13bf3c80.jar"
+        jar="/Users/matthewlogan/dev/CalendarAdapter/build/intermediates/exploded-aar/io.avocado.android.calendaradapter/library/1.0.0/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="66bfc1b7dbea93fda3a1362a17048592ae63a265"/>
+
+</pre-dex-items>

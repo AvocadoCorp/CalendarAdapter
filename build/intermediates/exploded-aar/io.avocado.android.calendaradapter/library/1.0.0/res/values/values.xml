@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- From: file:/Users/matthewlogan/dev/CalendarAdapter/library/src/main/res/values/colors.xml -->
+    <eat-comment />
+
+    <color name="default_cell_border_color">#efefef</color>
+    <color name="default_event_color">#85b826</color>
+    <color name="default_text_color">#333333</color>
+    <color name="past_future_cell_background_color">#ececec</color>
+    <color name="white">#ffffff</color>
+    <!-- From: file:/Users/matthewlogan/dev/CalendarAdapter/library/src/main/res/values/dimens.xml -->
+    <eat-comment />
+
+    <dimen name="cell_text_size">16sp</dimen>
+    <dimen name="day_of_week_text_size">16sp</dimen>
+    <dimen name="multi_day_stripe_thickness">.75dp</dimen>
+    <dimen name="plus_stroke_thickness">1.5dp</dimen>
+    <dimen name="title_text_size">44sp</dimen>
+    <!-- From: file:/Users/matthewlogan/dev/CalendarAdapter/library/src/main/res/values/strings.xml -->
+    <eat-comment />
+
+    <string name="app_name">CalendarAdapter</string>
+
+</resources>

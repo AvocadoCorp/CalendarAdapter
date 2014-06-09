@@ -1,8 +1,8 @@
 package io.avocado.android.calendaradapter.app;
 
+import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import io.avocado.android.calendaradapter.library.CalendarAdapter;
 import io.avocado.android.calendaradapter.library.CalendarEvent;
 
 
-public class MainActivity extends ActionBarActivity implements CalendarAdapter.OnDateSelectedListener {
+public class MainActivity extends Activity implements CalendarAdapter.OnDateSelectedListener {
 
     private CalendarAdapter adapter;
 
