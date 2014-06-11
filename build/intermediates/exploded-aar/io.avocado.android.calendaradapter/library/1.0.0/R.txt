@@ -9,7 +9,6 @@ int dimen day_of_week_text_size 0x7f050001
 int dimen multi_day_stripe_thickness 0x7f050002
 int dimen plus_stroke_thickness 0x7f050003
 int dimen title_text_size 0x7f050004
-int dimen today_border_thickness 0x7f050005
 int drawable ic_launcher 0x7f020000
 int id days_of_week 0x7f070001
 int id fri_text_view 0x7f070007

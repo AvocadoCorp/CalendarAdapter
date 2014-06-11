@@ -105,13 +105,13 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
         if (currentMonthCalendarEvents != null) {
             for (CalendarEvent calendarEvent : currentMonthCalendarEvents) {
-                cal.setTime(calendarEvent.startDate);
+                cal.setTime(calendarEvent.getStartDate());
                 startCalPos = daysToShowInPreviousMonthBeforeThisMonth +
                         cal.get(Calendar.DAY_OF_MONTH) - 1;
                 daysFromStartToEndDate = CalendarUtils.getNumberOfDaysInApartExclusive(
-                        calendarEvent.startDate, calendarEvent.endDate);
+                        calendarEvent.getStartDate(), calendarEvent.getEndDate());
 
-                if (calendarEvent.endDate == null || daysFromStartToEndDate == 0) {
+                if (calendarEvent.getEndDate() == null || daysFromStartToEndDate == 0) {
                     eventsPerDay[startCalPos] += 1;
                 } else {
                     int endCalPos = Math.min(startCalPos + daysFromStartToEndDate, 41);
@@ -130,13 +130,13 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
         if (previousMonthCalendarEvents != null) {
             for (CalendarEvent calendarEvent : previousMonthCalendarEvents) {
-                cal.setTime(calendarEvent.startDate);
+                cal.setTime(calendarEvent.getStartDate());
                 startCalPos = daysToShowInPreviousMonthBeforeThisMonth -
                         (daysInPreviousMonth - cal.get(Calendar.DAY_OF_MONTH)) - 1;
                 daysFromStartToEndDate = CalendarUtils.getNumberOfDaysInApartExclusive(
-                        calendarEvent.startDate, calendarEvent.endDate);
+                        calendarEvent.getStartDate(), calendarEvent.getEndDate());
 
-                if (calendarEvent.endDate == null || daysFromStartToEndDate == 0) {
+                if (calendarEvent.getEndDate() == null || daysFromStartToEndDate == 0) {
                     if (startCalPos >= 0) {
                         eventsPerDay[startCalPos] += 1;
                     }
@@ -159,13 +159,13 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
         if (nextMonthCalendarEvents != null) {
             for (CalendarEvent calendarEvent : nextMonthCalendarEvents) {
-                cal.setTime(calendarEvent.startDate);
+                cal.setTime(calendarEvent.getStartDate());
                 startCalPos = daysToShowInPreviousMonthBeforeThisMonth + daysInCurrentMonth
                         + cal.get(Calendar.DAY_OF_MONTH) - 1;
                 daysFromStartToEndDate = CalendarUtils.getNumberOfDaysInApartExclusive(
-                        calendarEvent.startDate, calendarEvent.endDate);
+                        calendarEvent.getStartDate(), calendarEvent.getEndDate());
 
-                if (calendarEvent.endDate == null || daysFromStartToEndDate == 0) {
+                if (calendarEvent.getEndDate() == null || daysFromStartToEndDate == 0) {
                     if (startCalPos < 42) {
                         eventsPerDay[startCalPos] += 1;
                     }

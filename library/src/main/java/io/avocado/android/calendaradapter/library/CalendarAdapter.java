@@ -201,7 +201,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
         monthCal.add(Calendar.MONTH, -1);
 
         Calendar eventCal = Calendar.getInstance();
-        eventCal.setTime(calendarEvent.startDate);
+        eventCal.setTime(calendarEvent.getStartDate());
 
         for (int i = 0; i <= months.length + 1; i++) {
             if (calendarEventsInEachMonth.get(i) == null) {
@@ -217,7 +217,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
         }
     }
 
-    public void setCalendarEvents(List<CalendarEvent> calendarEvents) {
+    public void setCalendarEvents(List<? extends CalendarEvent> calendarEvents) {
         if (calendarEventsInEachMonth == null) {
             calendarEventsInEachMonth = new ArrayList<List<CalendarEvent>>();
         } else {
@@ -232,7 +232,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
         for (int i = 0; i <= months.length + 1; i++) {
             List<CalendarEvent> eventDatesInMonth = new ArrayList<CalendarEvent>();
             for (CalendarEvent calendarEvent : calendarEvents) {
-                eventCal.setTime(calendarEvent.startDate);
+                eventCal.setTime(calendarEvent.getStartDate());
                 if (monthCal.get(Calendar.YEAR) == eventCal.get(Calendar.YEAR) &&
                         monthCal.get(Calendar.MONTH) == eventCal.get(Calendar.MONTH)) {
                     eventDatesInMonth.add(calendarEvent);
@@ -275,7 +275,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
 
         private int todayCalendarCellBackgroundColor = -1;
 
-        private List<CalendarEvent> calendarEvents;
+        private List<? extends CalendarEvent> calendarEvents;
 
         private OnDateSelectedListener listener;
 
@@ -358,7 +358,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
             return this;
         }
 
-        public Builder calendarEvents(List<CalendarEvent> calendarEvents) {
+        public Builder calendarEvents(List<? extends CalendarEvent> calendarEvents) {
             this.calendarEvents = calendarEvents;
             return this;
         }
@@ -406,7 +406,7 @@ public class CalendarAdapter extends BaseAdapter implements ListAdapter {
                 for (int i = 0; i <= months.length + 1; i++) {
                     List<CalendarEvent> calendarEventsInMonth = new ArrayList<CalendarEvent>();
                     for (CalendarEvent calendarEvent : calendarEvents) {
-                        eventCal.setTime(calendarEvent.startDate);
+                        eventCal.setTime(calendarEvent.getStartDate());
                         if (monthCal.get(Calendar.YEAR) == eventCal.get(Calendar.YEAR) &&
                                 monthCal.get(Calendar.MONTH) == eventCal.get(Calendar.MONTH)) {
                             calendarEventsInMonth.add(calendarEvent);

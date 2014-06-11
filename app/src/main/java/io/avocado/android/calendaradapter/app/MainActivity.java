@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 
 import io.avocado.android.calendaradapter.library.CalendarAdapter;
-import io.avocado.android.calendaradapter.library.CalendarEvent;
 
 
 public class MainActivity extends Activity implements CalendarAdapter.OnDateSelectedListener {
@@ -51,7 +50,7 @@ public class MainActivity extends Activity implements CalendarAdapter.OnDateSele
         int calendarCellBorderColor = getResources().getColor(R.color.calendar_cell_border);
         int todayBackgroundColor = getResources().getColor(R.color.today_background);
 
-        List<CalendarEvent> calendarEvents = new ArrayList<CalendarEvent>();
+        List<TestEvent> testEvents = new ArrayList<TestEvent>();
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
         cal.add(Calendar.MONTH, -1);
@@ -62,12 +61,12 @@ public class MainActivity extends Activity implements CalendarAdapter.OnDateSele
                 endCal.setTime(cal.getTime());
                 endCal.add(Calendar.DAY_OF_MONTH, 7);
                 Date eventEndTime = endCal.getTime();
-                calendarEvents.add(new CalendarEvent(cal.getTime(), eventEndTime));
+                testEvents.add(new TestEvent(cal.getTime(), eventEndTime));
             }
 
             // Add a bunch of 1 day events
             if (cal.get(Calendar.DAY_OF_MONTH) % 5 == 0) {
-                calendarEvents.add(new CalendarEvent(cal.getTime(), null));
+                testEvents.add(new TestEvent(cal.getTime(), null));
             }
 
             cal.add(Calendar.DAY_OF_MONTH, 1);
@@ -88,18 +87,19 @@ public class MainActivity extends Activity implements CalendarAdapter.OnDateSele
                 .pastFutureEventColor(pastFutureEventColor)
                 .calendarCellBorderColor(calendarCellBorderColor)
                 .todayCalendarCellBackgroundColor(todayBackgroundColor)
+                .calendarEvents(testEvents)
                 .onDateSelectedListener(this)
                 .create();
 
         calendarListView.setAdapter(adapter);
 
-        adapter.setCalendarEvents(calendarEvents);
+        adapter.setCalendarEvents(testEvents);
         adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onDateSelected(Date date) {
-        adapter.addCalendarEvent(new CalendarEvent(date, null));
+        adapter.addCalendarEvent(new TestEvent(date, null));
         adapter.notifyDataSetChanged();
     }
 }

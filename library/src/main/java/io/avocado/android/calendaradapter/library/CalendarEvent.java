@@ -3,15 +3,9 @@ package io.avocado.android.calendaradapter.library;
 import java.util.Date;
 
 /**
- * Created by matthewlogan on 6/6/14.
+ * Created by matthewlogan on 6/11/14.
  */
-public class CalendarEvent {
-
-    public Date startDate;
-    public Date endDate;
-
-    public CalendarEvent(Date startDate, Date endDate) {
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
+public interface CalendarEvent {
+    public Date getStartDate();
+    public Date getEndDate();
 }
