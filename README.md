@@ -43,13 +43,13 @@ calendarListView.setAdapter(adapter);
 
 `CalendarAdapter` also contains the following public methods for manipulating its data after initialization:
 
-##### addCalendarEvent(CalendarEvent calendarEvent)
-
-Add an event.
-
 ##### setCalendarEvents(List\<CalendarEvent\> calendarEvents)
 
 Set all the events to be displayed.  All previous data will be cleared.  You may use this to set events after `CalendarAdapter`  initialization, but if all the events are known prior to initialization you should pass the `calendarEvents` in the corresponding `CalendarAdapter.Builder` method.
+
+##### addCalendarEvent(CalendarEvent calendarEvent)
+
+Add an event to the previous `List` of events..  This does not clear the previous data.
 
 As with any Android `Adapter`, be sure to call `notifyDataSetChanged()` after changing its data.
 
@@ -108,6 +108,10 @@ The color of the squares to symbolize events in calendar cells outside of the cu
 ##### calendarCellBorderColor(int calendarCellBorderColor)
 
 The border color for the 1-pixel wide calendar cell borders.
+
+##### todayCalendarCellBackgroundColor(int todayCalendarCellBackgroundColor)
+
+The color for the background of the calendar cell representing today's date.
 
 ##### onDateSelectedListener(OnDateSelectedListener listener)
 
