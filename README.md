@@ -41,7 +41,9 @@ calendarListView.setAdapter(adapter);
 
 `CalendarAdapter` uses an interface called `CalendarEvent` for representing events.  `CalendarEvent` has two public methods, `getStartDate()` and `getEndDate()`.
 
-`CalendarAdapter` also contains the following public methods for manipulating its data after initialization:
+## Methods
+
+`CalendarAdapter` contains the following public methods for manipulating its data after initialization:
 
 ##### setCalendarEvents(List\<? extends CalendarEvent\> calendarEvents)
 
