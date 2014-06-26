@@ -58,7 +58,7 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
                             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                             if (MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY &&
                                     !didSetChildHeights) {
-                                
+
                                 setChildrenHeights(MeasureSpec.getSize(widthMeasureSpec));
                                 didSetChildHeights = true;
                             }
@@ -68,8 +68,7 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
                     calendarCell = new CalendarCell(context);
                 }
 
-                LayoutParams cellLp = new LayoutParams(0,
-                        ViewGroup.LayoutParams.MATCH_PARENT);
+                LayoutParams cellLp = new LayoutParams(0, 0);
                 cellLp.weight = 1;
                 calendarCell.setLayoutParams(cellLp);
 
@@ -105,7 +104,8 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
             LinearLayout calendarRow = (LinearLayout) getChildAt(i);
             for (int j = 0; j < 7; j++) {
                 CalendarCell calendarCell = (CalendarCell) calendarRow.getChildAt(j);
-                calendarCell.setMinimumHeight(height);
+                ViewGroup.LayoutParams cellLp = calendarCell.getLayoutParams();
+                cellLp.height = height;
             }
         }
     }
