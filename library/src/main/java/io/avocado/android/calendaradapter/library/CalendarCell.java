@@ -104,9 +104,6 @@ public class CalendarCell extends View {
         todayPaint = new Paint();
         todayPaint.setStyle(Paint.Style.FILL);
         todayPaint.setColor(0xffcee3a8);
-
-        int height = (int) (getResources().getDisplayMetrics().widthPixels / 7.f);
-        setMinimumHeight(height);
     }
 
     public void setTextColor(int textColor) {

@@ -33,6 +33,8 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
     public CalendarAdapter.OnDateSelectedListener listener;
 
+    private boolean didSetChildHeights = false;
+
     public CalendarGrid(Context context) {
         this(context, null);
     }
@@ -47,7 +49,24 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
             calendarRow.setOrientation(HORIZONTAL);
 
             for (int j = 0; j < 7; j++) {
-                CalendarCell calendarCell = new CalendarCell(context);
+                CalendarCell calendarCell;
+
+                if (i == 0 && j == 0) {
+                    calendarCell = new CalendarCell(context) {
+                        @Override
+                        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+                            if (MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY &&
+                                    !didSetChildHeights) {
+                                
+                                setChildrenHeights(MeasureSpec.getSize(widthMeasureSpec));
+                                didSetChildHeights = true;
+                            }
+                        }
+                    };
+                } else {
+                    calendarCell = new CalendarCell(context);
+                }
 
                 LayoutParams cellLp = new LayoutParams(0,
                         ViewGroup.LayoutParams.MATCH_PARENT);
@@ -78,6 +97,16 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
             }
 
             addView(calendarRow);
+        }
+    }
+
+    private void setChildrenHeights(int height) {
+        for (int i = 0; i < 6; i++) {
+            LinearLayout calendarRow = (LinearLayout) getChildAt(i);
+            for (int j = 0; j < 7; j++) {
+                CalendarCell calendarCell = (CalendarCell) calendarRow.getChildAt(j);
+                calendarCell.setMinimumHeight(height);
+            }
         }
     }
 
