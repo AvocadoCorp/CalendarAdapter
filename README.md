@@ -39,13 +39,15 @@ Then hand off the `CalendarAdapter` to your `ListView` and you're good to go:
 calendarListView.setAdapter(adapter);
 ```
 
-`CalendarAdapter` uses a class called `CalendarEvent` for representing events.  `CalendarEvent` has two public `Date` instance variables, `startDate` and `endDate`, both of which are passed in in the constructor.
+`CalendarAdapter` uses an interface called `CalendarEvent` for representing events.  `CalendarEvent` has two public methods, `getStartDate()` and `getEndDate()`.
 
-`CalendarAdapter` also contains the following public methods for manipulating its data after initialization:
+## Methods
 
-##### setCalendarEvents(List\<CalendarEvent\> calendarEvents)
+`CalendarAdapter` contains the following public methods for manipulating its data after initialization:
 
-Set all the events to be displayed.  All previous data will be cleared.  You may use this to set events after `CalendarAdapter`  initialization, but if all the events are known prior to initialization you should pass the `calendarEvents` in the corresponding `CalendarAdapter.Builder` method.
+##### setCalendarEvents(List\<? extends CalendarEvent\> calendarEvents)
+
+Set all the events to be displayed.  All previous data will be cleared.  You may use this to set events after `CalendarAdapter` initialization, but if all the events are known prior to initialization you should pass the `calendarEvents` in the corresponding `CalendarAdapter.Builder` method.
 
 ##### addCalendarEvent(CalendarEvent calendarEvent)
 
@@ -116,14 +118,14 @@ The color for the background of the calendar cell representing today's date.
 ##### onDateSelectedListener(OnDateSelectedListener listener)
 
 A listener that implements the method:
-
+   
 ```java
 public void onDateSelected(Date date)
 ```
 
-##### calendarEvents(List\<CalendarEvent\> calendarEvents)
+##### calendarEvents(List\<? extends CalendarEvent\> calendarEvents)
 
-A `List` of `CalendarEvent` objects representing events.  These are shown as colored squares on the calendar.
+A `List` of objects implementing the `CalendarEvent` interface.  These events are shown as colored squares on the calendar.
 
 
 ## License
