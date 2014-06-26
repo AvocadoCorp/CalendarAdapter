@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.avocado.android.calendaradapter.library" >
 
-    <uses-sdk android:minSdkVersion="1" />
+    <uses-sdk android:minSdkVersion="3" />
 
     <application
         android:allowBackup="true"
