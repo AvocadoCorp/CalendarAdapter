@@ -5,7 +5,4 @@
     <dimen name="cell_text_size">16sp</dimen>
     <dimen name="plus_stroke_thickness">1.5dp</dimen>
     <dimen name="multi_day_stripe_thickness">.75dp</dimen>
-
-    <!-- The default gap between components in a layout. -->
-    <dimen name="default_gap">16dip</dimen>
 </resources>
