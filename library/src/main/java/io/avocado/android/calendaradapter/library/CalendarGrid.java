@@ -3,6 +3,7 @@ package io.avocado.android.calendaradapter.library;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -33,7 +34,7 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
     public CalendarAdapter.OnDateSelectedListener listener;
 
-    private boolean didSetChildHeights = false;
+    private int heightMeasureSpecToUse = 0;
 
     public CalendarGrid(Context context) {
         this(context, null);
@@ -49,24 +50,19 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
             calendarRow.setOrientation(HORIZONTAL);
 
             for (int j = 0; j < 7; j++) {
-                CalendarCell calendarCell;
+                CalendarCell calendarCell = new CalendarCell(context) {
+                    @Override
+                    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                        if (MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY &&
+                                MeasureSpec.getSize(widthMeasureSpec) > 0 &&
+                                heightMeasureSpecToUse == 0) {
 
-                if (i == 0 && j == 0) {
-                    calendarCell = new CalendarCell(context) {
-                        @Override
-                        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-                            if (MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY &&
-                                    !didSetChildHeights) {
-
-                                setChildrenHeights(MeasureSpec.getSize(widthMeasureSpec));
-                                didSetChildHeights = true;
-                            }
+                            heightMeasureSpecToUse = widthMeasureSpec;
                         }
-                    };
-                } else {
-                    calendarCell = new CalendarCell(context);
-                }
+
+                        super.onMeasure(widthMeasureSpec, heightMeasureSpecToUse);
+                    }
+                };
 
                 LayoutParams cellLp = new LayoutParams(0, 0);
                 cellLp.weight = 1;
@@ -96,17 +92,6 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
             }
 
             addView(calendarRow);
-        }
-    }
-
-    private void setChildrenHeights(int height) {
-        for (int i = 0; i < 6; i++) {
-            LinearLayout calendarRow = (LinearLayout) getChildAt(i);
-            for (int j = 0; j < 7; j++) {
-                CalendarCell calendarCell = (CalendarCell) calendarRow.getChildAt(j);
-                ViewGroup.LayoutParams cellLp = calendarCell.getLayoutParams();
-                cellLp.height = height;
-            }
         }
     }
 
