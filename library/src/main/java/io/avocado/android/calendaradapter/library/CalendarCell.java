@@ -273,19 +273,19 @@ public class CalendarCell extends View {
 
         if (shouldDrawLeftBorder) {
             // Left border stroke
-            canvas.drawLine(0, 0, 0, height - 1, borderPaint);
+            canvas.drawRect(0, 0, 1, height, borderPaint);
         }
 
         if (shouldDrawTopBorder) {
             // Top border stroke
-            canvas.drawLine(0, 0, width - 1, 0, borderPaint);
+            canvas.drawRect(0, 0, width, 1, borderPaint);
         }
 
         // Right border stroke
-        canvas.drawLine(width - 1, 0, width - 1, height - 1, borderPaint);
+        canvas.drawRect(width - 1, 0, width, height, borderPaint);
 
         // Bottom border stroke
-        canvas.drawLine(0, height - 1, width, height - 1, borderPaint);
+        canvas.drawRect(0, height - 1, width, height, borderPaint);
 
         // Day of month text
         canvas.drawText(dateText, textOrigin[0], textOrigin[1], textPaint);
