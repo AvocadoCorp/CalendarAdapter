@@ -55,7 +55,9 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
                     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                         if (MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY &&
                                 MeasureSpec.getSize(widthMeasureSpec) > 0 &&
-                                heightMeasureSpecToUse == 0) {
+                                (heightMeasureSpecToUse == 0 ||
+                                        MeasureSpec.getSize(widthMeasureSpec) >
+                                                MeasureSpec.getSize(heightMeasureSpecToUse))) {
 
                             heightMeasureSpecToUse = widthMeasureSpec;
                         }
