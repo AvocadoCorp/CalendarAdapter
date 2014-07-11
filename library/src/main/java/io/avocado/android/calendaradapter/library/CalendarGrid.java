@@ -3,9 +3,7 @@ package io.avocado.android.calendaradapter.library;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import java.util.Calendar;
@@ -34,7 +32,7 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
 
     public CalendarAdapter.OnDateSelectedListener listener;
 
-    private int heightMeasureSpecToUse = 0;
+    private int measureSpecToUse = 0;
 
     public CalendarGrid(Context context) {
         this(context, null);
@@ -53,16 +51,18 @@ public class CalendarGrid extends LinearLayout implements View.OnClickListener {
                 CalendarCell calendarCell = new CalendarCell(context) {
                     @Override
                     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                        if (MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY &&
-                                MeasureSpec.getSize(widthMeasureSpec) > 0 &&
-                                (heightMeasureSpecToUse == 0 ||
-                                        MeasureSpec.getSize(widthMeasureSpec) >
-                                                MeasureSpec.getSize(heightMeasureSpecToUse))) {
+                        int currentSize = MeasureSpec.getSize(measureSpecToUse);
+                        int newSize = MeasureSpec.getSize(widthMeasureSpec);
+                        boolean useNewSize =
+                                MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY &&
+                                        newSize > 0 &&
+                                        (currentSize == 0 || Math.abs(newSize - currentSize) > 1);
 
-                            heightMeasureSpecToUse = widthMeasureSpec;
+                        if (useNewSize) {
+                            measureSpecToUse = widthMeasureSpec;
                         }
 
-                        super.onMeasure(widthMeasureSpec, heightMeasureSpecToUse);
+                        super.onMeasure(measureSpecToUse, measureSpecToUse);
                     }
                 };
 
