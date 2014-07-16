@@ -39,7 +39,25 @@ Then hand off the `CalendarAdapter` to your `ListView` and you're good to go:
 calendarListView.setAdapter(adapter);
 ```
 
-`CalendarAdapter` uses an interface called `CalendarEvent` for representing events.  `CalendarEvent` has two public methods, `getStartDate()` and `getEndDate()`.
+`CalendarAdapter` uses an interface called `CalendarEvent` for representing events.  `CalendarEvent` has two public methods, `getStartDate()` and `getEndDate()`.  For example:
+
+```java
+public class AvocadoEvent implements CalendarEvent {
+
+    public AvocadoEvent(Date startDate, Date endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    @Override public Date getStartDate() {
+        return startDate;
+    }
+    
+    @Override public Date getEndDate() {
+        return endDate;
+    }
+}
+```
 
 ## Methods
 
